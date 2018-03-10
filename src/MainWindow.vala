@@ -27,16 +27,17 @@
 
 namespace TrimDown {
     public class MainWindow : Gtk.Window {
-      //  Services.LibraryManager library_manager;
-      Settings settings;
+        Services.ProjectManager project_manager;
+        Settings settings;
 
-      Gtk.HeaderBar headerbar;
-      Gtk.Stack content;
+        Gtk.HeaderBar headerbar;
+        Gtk.Stack content;
 
+        Widgets.Views.Writer writer;
 
         construct {
             settings = Settings.get_default ();
-
+            project_manager = Services.ProjectManager.instance;
         }
 
         public MainWindow () {
@@ -52,22 +53,30 @@ namespace TrimDown {
 
             content = new Gtk.Stack ();
 
-
             var welcome = new Widgets.Views.Welcome ();
             welcome.new_project_clicked.connect (
                 () => {
                     var new_project = new Dialogs.NewProject (this);
                     if (new_project.run () == Gtk.ResponseType.ACCEPT) {
-                        // create new project;
+                        var project = project_manager.create_new_project (new_project.project_title, new_project.project_kind);
+                        if (project != null) {
+                            open_project (project);
+                        }
                     }
                     new_project.destroy ();
                 });
 
+            writer = new Widgets.Views.Writer ();
+
             content.add_named (welcome, "welcome");
+            content.add_named (writer, "writer");
             this.add (content);
             this.show_all ();
         }
 
-
+        private void open_project (Objects.Project project) {
+            writer.show_project (project);
+            content.visible_child_name = "writer";
+        }
     }
 }

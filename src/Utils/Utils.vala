@@ -25,31 +25,18 @@
  * Authored by: Artem Anufrij <artem.anufrij@live.de>
  */
 
-namespace TrimDown.Widgets.Views {
-    public class Writer : Gtk.Grid {
+namespace TrimDown.Utils {
+    public static string get_new_project_property (string title, string kind) {
+        return """[General]
+title=""" + title + """
+kind=""" + kind + """
+""";
+    }
 
-        public Objects.Project? current_project { get; private set; default = null; }
-
-        public Writer () {
-            build_ui ();
-        }
-
-        private void build_ui () {
-
-            var chapter_paned = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
-            var scene_paned = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
-
-            chapter_paned.pack2 (scene_paned, false, false);
-
-            this.add (chapter_paned);
-        }
-
-        public void show_project (Objects.Project project) {
-            if (current_project == project) {
-                return;
-            }
-
-
-        }
+    public static string get_new_chapter_property (string title, int order) {
+        return """[General]
+title=""" + title + """
+order=""" + order.to_string () + """
+""";
     }
 }

@@ -39,6 +39,7 @@ executable(
     'src/Widgets/Views/Welcome.vala',
     'src/Dialogs/NewProject.vala',
     'src/Services/ProjectManager.vala',
+    'src/Utils/Utils.vala',
 
  #   asresources,
     c_args: c_args,

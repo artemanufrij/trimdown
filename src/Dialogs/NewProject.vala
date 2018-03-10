@@ -27,12 +27,22 @@
 
 namespace TrimDown.Dialogs {
     public class NewProject : Gtk.Dialog {
-        public NewProject(Gtk.Window parent) {
-            Object (
-transient_for: parent,
-resizable: false,
-                use_header_bar: 1
-                );
+        Services.ProjectManager project_manager;
+
+        Gtk.Entry entry_title;
+        Gtk.ComboBoxText choose_type;
+        Gtk.Button create_button;
+
+        public string project_title { get; private set; default = ""; }
+        public string project_kind { get; private set; default = ""; }
+
+        construct {
+            project_manager = Services.ProjectManager.instance;
+        }
+
+
+        public NewProject (Gtk.Window parent) {
+            Object (transient_for: parent, resizable: false, use_header_bar: 1);
             build_ui ();
         }
 
@@ -52,22 +62,29 @@ resizable: false,
             grid.margin = 12;
             grid.row_spacing = 12;
 
-            var project_name = new Gtk.Entry ();
-            project_name.hexpand = true;
-            project_name.placeholder_text = _ ("Project name");
-            project_name.get_style_context ().add_class ("h3");
-            grid.attach (project_name, 0, 0);
+            entry_title = new Gtk.Entry ();
+            entry_title.hexpand = true;
+            entry_title.placeholder_text = _ ("Project Title");
+            entry_title.get_style_context ().add_class ("h3");
+            entry_title.changed.connect (validate_entries);
+            grid.attach (entry_title, 0, 0);
 
-            var project_type = new Gtk.ComboBoxText ();
-            grid.attach (project_type, 0, 1);
+            choose_type = new Gtk.ComboBoxText ();
+            choose_type.append ("[empty]", _ ("[empty]"));
+            choose_type.append ("SiFi", "SiFi");
+            choose_type.append ("Fantasy", "Fantasy");
+            choose_type.active_id = "[empty]";
+
+            grid.attach (choose_type, 0, 1);
 
             content.pack_start (grid);
 
             // ACTION BUTTONS
             Gtk.Box actions = this.get_action_area () as Gtk.Box;
 
-            var create_button = new Gtk.Button.with_label (_ ("Create"));
+            create_button = new Gtk.Button.with_label (_ ("Create"));
             create_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+            create_button.sensitive = false;
             create_button.clicked.connect (
                 () => {
                     this.response (Gtk.ResponseType.ACCEPT);
@@ -76,6 +93,16 @@ resizable: false,
             actions.add (create_button);
 
             this.show_all ();
+        }
+
+        private void validate_entries () {
+            project_title = entry_title.text.strip ();
+            if (choose_type.active_id == "[empty]") {
+                project_kind = "";
+            } else {
+                project_kind = choose_type.active_id;
+            }
+            create_button.sensitive = !project_manager.project_name_exists (project_title);
         }
     }
 }

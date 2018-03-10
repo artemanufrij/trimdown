@@ -27,6 +27,57 @@
 
 namespace TrimDown.Objects {
     public class Project : GLib.Object {
+        public string title { get; private set; }
+        public string kind { get; private set; }
+        string path { get; set; }
 
+
+        GLib.List<Chapter> ? _chapters = null;
+        public GLib.List<Chapter> chapters {
+            get {
+                if (_chapters == null) {
+                    _chapters = get_chapter_collection ();
+                }
+
+                return _chapters;
+            }
+        }
+
+        KeyFile properties;
+
+        public Project (string path, string kind = "") {
+            this.path = path;
+            this.kind = kind;
+            this.title = Path.get_basename (path);
+
+            load_properties ();
+        }
+
+        private void load_properties () {
+            var prop = Path.build_filename (path, title + ".td");
+            if (!FileUtils.test (prop, FileTest.EXISTS)) {
+                FileUtils.set_contents (prop, Utils.get_new_project_property (title, kind));
+            }
+
+            properties = new KeyFile ();
+            properties.load_from_file (prop, KeyFileFlags.NONE);
+
+            title = properties.get_string ("General", "title");
+            kind = properties.get_string ("General", "kind");
+        }
+
+        private GLib.List<Chapter> get_chapter_collection () {
+            GLib.List<Chapter> return_value = new GLib.List<Chapter> ();
+
+            var chap = Path.build_filename (path, "Chapters");
+            var directory = File.new_for_path (chap);
+            var children = directory.enumerate_children ("standard::*," + FileAttribute.STANDARD_CONTENT_TYPE, GLib.FileQueryInfoFlags.NONE);
+            FileInfo file_info = null;
+
+            while ((file_info = children.next_file ()) != null) {
+            }
+
+            return return_value;
+        }
     }
 }

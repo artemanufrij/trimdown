@@ -53,8 +53,7 @@ namespace TrimDown {
         private void create_project_folder () {
             var library_path = File.new_for_path (settings.projects_location);
             if (settings.projects_location == "" || !library_path.query_exists ()) {
-                settings.projects_location = Path.build_path (GLib.Environment.get_user_special_dir (GLib.UserDirectory.DOCUMENTS), "Trimdown");
-stdout.printf ("%s\n", settings.projects_location);
+                settings.projects_location = Path.build_filename (GLib.Environment.get_user_special_dir (GLib.UserDirectory.DOCUMENTS), "Trimdown");
                 library_path = File.new_for_path (settings.projects_location);
                 if (!library_path.query_exists ()) {
                     try {
