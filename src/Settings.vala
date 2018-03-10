@@ -12,7 +12,7 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * The Noise authors hereby grant permission for non-GPL compatible
  * GStreamer plugins to be used and distributed together with GStreamer
@@ -26,48 +26,24 @@
  */
 
 namespace TrimDown {
-    public class MainWindow : Gtk.Window {
-      //  Services.LibraryManager library_manager;
-      Settings settings;
-
-      Gtk.HeaderBar headerbar;
-      Gtk.Stack content;
-
-
-        construct {
-            settings = Settings.get_default ();
-
+    public class Settings : Granite.Services.Settings {
+        private static Settings settings;
+        public static Settings get_default () {
+            if (settings == null) {
+                settings = new Settings ();
+            }
+            return settings;
         }
+        public int window_width { get; set; }
+        public int window_height { get; set; }
+        public int window_x { get; set; }
+        public int window_y { get; set; }
+        public bool window_maximized { get; set; }
+        public string projects_location { get; set; }
+        public bool use_dark_theme { get; set; }
 
-        public MainWindow () {
-            build_ui ();
+        private Settings () {
+            base ("com.github.artemanufrij.trimdown");
         }
-
-        private void build_ui () {
-            headerbar = new Gtk.HeaderBar ();
-            headerbar.title = "TrimDown";
-            headerbar.show_close_button = true;
-            headerbar.get_style_context ().add_class ("default-decoration");
-            this.set_titlebar (headerbar);
-
-            content = new Gtk.Stack ();
-
-
-            var welcome = new Widgets.Views.Welcome ();
-            welcome.new_project_clicked.connect (
-                () => {
-                    var new_project = new Dialogs.NewProject (this);
-                    if (new_project.run () == Gtk.ResponseType.ACCEPT) {
-                        // create new project;
-                    }
-                    new_project.destroy ();
-                });
-
-            content.add_named (welcome, "welcome");
-            this.add (content);
-            this.show_all ();
-        }
-
-
     }
 }

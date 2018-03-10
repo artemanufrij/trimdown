@@ -27,7 +27,7 @@
 
 namespace TrimDown {
     public class TrimDownApp : Gtk.Application {
-       // Settings settings;
+        Settings settings;
 
         static TrimDownApp _instance = null;
         public static TrimDownApp instance {
@@ -41,12 +41,30 @@ namespace TrimDown {
 
         construct {
             this.application_id = "com.github.artemanufrij.trimdown";
-      //      settings = Settings.get_default ();
+            settings = Settings.get_default ();
         }
 
-        private TrimDownApp () { }
+        private TrimDownApp () {
+            create_project_folder ();
+        }
 
         public MainWindow mainwindow { get; private set; default = null; }
+
+        private void create_project_folder () {
+            var library_path = File.new_for_path (settings.projects_location);
+            if (settings.projects_location == "" || !library_path.query_exists ()) {
+                settings.projects_location = Path.build_path (GLib.Environment.get_user_special_dir (GLib.UserDirectory.DOCUMENTS), "Trimdown");
+stdout.printf ("%s\n", settings.projects_location);
+                library_path = File.new_for_path (settings.projects_location);
+                if (!library_path.query_exists ()) {
+                    try {
+                        library_path.make_directory ();
+                    } catch (Error err) {
+                        warning (err.message);
+                    }
+                }
+            }
+        }
 
         protected override void activate () {
             if (mainwindow == null) {

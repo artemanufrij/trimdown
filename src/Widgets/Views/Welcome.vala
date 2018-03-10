@@ -12,7 +12,7 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * The Noise authors hereby grant permission for non-GPL compatible
  * GStreamer plugins to be used and distributed together with GStreamer
@@ -26,21 +26,31 @@
  */
 
 namespace TrimDown.Widgets.Views {
-    public class WriterView : Gtk.Grid {
+    public class Welcome : Gtk.Grid {
+        public signal void new_project_clicked ();
 
-        public WriterView () {
+        public Welcome () {
             build_ui ();
         }
 
         private void build_ui () {
+            var welcome = new Granite.Widgets.Welcome (_ ("Title"), _ ("Subtitle."));
+            welcome.append ("folder-documents", _ ("Open a Project"), _ ("Open an exists project from your library."));
+            welcome.append ("document-new", _ ("Create a new Project"), _ ("Write next best seller."));
+            welcome.activated.connect (
+                (index) => {
+                    switch (index) {
+                    case 0 :
 
-            var chapter_paned = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
-            var scene_paned = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
+                        break;
+                    case 1 :
+                        new_project_clicked ();
+                        break;
+                    }
+                });
 
-
-            chapter_paned.pack2 (chapter_paned, false, false);
-
-            this.add (chapter_paned);
+            this.add (welcome);
+            this.show_all ();
         }
     }
 }

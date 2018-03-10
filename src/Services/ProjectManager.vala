@@ -25,49 +25,30 @@
  * Authored by: Artem Anufrij <artem.anufrij@live.de>
  */
 
-namespace TrimDown {
-    public class MainWindow : Gtk.Window {
-      //  Services.LibraryManager library_manager;
-      Settings settings;
+namespace TrimDown.Services {
+    public class ProjectManager : GLib.Object {
+        Settings settings;
 
-      Gtk.HeaderBar headerbar;
-      Gtk.Stack content;
-
+        static ProjectManager _instance = null;
+        public static ProjectManager instance {
+            get {
+                if (_instance == null) {
+                    _instance = new ProjectManager ();
+                }
+                return _instance;
+            }
+        }
 
         construct {
             settings = Settings.get_default ();
-
         }
 
-        public MainWindow () {
-            build_ui ();
+        private ProjectManager() {
         }
 
-        private void build_ui () {
-            headerbar = new Gtk.HeaderBar ();
-            headerbar.title = "TrimDown";
-            headerbar.show_close_button = true;
-            headerbar.get_style_context ().add_class ("default-decoration");
-            this.set_titlebar (headerbar);
-
-            content = new Gtk.Stack ();
-
-
-            var welcome = new Widgets.Views.Welcome ();
-            welcome.new_project_clicked.connect (
-                () => {
-                    var new_project = new Dialogs.NewProject (this);
-                    if (new_project.run () == Gtk.ResponseType.ACCEPT) {
-                        // create new project;
-                    }
-                    new_project.destroy ();
-                });
-
-            content.add_named (welcome, "welcome");
-            this.add (content);
-            this.show_all ();
+        public bool project_name_exists (string name) {
+            var project_path = Path.build_path (settings.projects_location, name);
+            return FileUtils.test ( project_path, FileTest.EXISTS);
         }
-
-
     }
 }

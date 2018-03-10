@@ -20,8 +20,8 @@ deps = [
 ]
 
 #asresources = gnome.compile_resources(
-#    'as-resources', 'schema/' + meson.project_name() + '.gresource.xml',
-#    source_dir: 'schema',
+#    'as-resources', 'schemas/' + meson.project_name() + '.gresource.xml',
+#    source_dir: 'schemas',
 #    c_name: 'as'
 #)
 
@@ -29,15 +29,18 @@ executable(
     meson.project_name(),
     'src/Application.vala',
     'src/MainWindow.vala',
+    'src/Settings.vala',
     'src/Objects/Scene.vala',
     'src/Objects/Chapter.vala',
     'src/Objects/Project.vala',
     'src/Widgets/Scene.vala',
     'src/Widgets/Chapter.vala',
-    'src/Widgets/Views/WriterView.vala',
+    'src/Widgets/Views/Writer.vala',
+    'src/Widgets/Views/Welcome.vala',
+    'src/Dialogs/NewProject.vala',
+    'src/Services/ProjectManager.vala',
 
-
-#    asresources,
+ #   asresources,
     c_args: c_args,
     dependencies: [
         deps
@@ -45,7 +48,8 @@ executable(
     install : true
 )
 
-#meson.add_install_script('meson/post_install.py')
+meson.add_install_script('meson/post_install.py')
 
+subdir('schemas')
 #subdir('data')
 #subdir('po')
