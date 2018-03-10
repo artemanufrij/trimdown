@@ -58,21 +58,38 @@ namespace TrimDown.Services {
         public Objects.Project ? create_new_project (string title, string kind = "") {
             var project_path = Path.build_filename (settings.projects_location, title);
             if (!FileUtils.test (project_path, FileTest.EXISTS)) {
-
-                var basic_struct = Path.build_filename (project_path, "Chapters", "Chapter001");
+                var basic_struct = Path.build_filename (project_path, "Chapters");
                 DirUtils.create_with_parents (basic_struct, 0755);
-                var file = File.new_for_path (project_path);
-                try {
-                    file.make_directory ();
-                } catch (Error err) {
-                    warning (err.message);
-                    return null;
-                }
 
-                return new Objects.Project (project_path, kind);
+                var new_project = new Objects.Project (project_path, kind);
+                var new_chapter = new_project.create_chapter ("Title", 0);
+                new_chapter.set_new_title (title);
+                return new_project;
             }
 
             return null;
+        }
+
+        public Objects.Project ? open_project () {
+            Objects.Project ? return_value = null;
+            Gtk.FileChooserDialog chooser = new Gtk.FileChooserDialog (
+                _ ("Open a TrimDown project."), TrimDownApp.instance.mainwindow, Gtk.FileChooserAction.OPEN,
+                _ ("_Cancel"), Gtk.ResponseType.CANCEL,
+                _ ("_Open"), Gtk.ResponseType.ACCEPT);
+
+            var filter = new Gtk.FileFilter ();
+            filter.set_filter_name (_ ("TrimDown Project"));
+            filter.add_pattern ("*.td");
+
+            chooser.add_filter (filter);
+
+            if (chooser.run () == Gtk.ResponseType.ACCEPT) {
+                var dir = Path.get_dirname (chooser.get_file ().get_path ());
+                return_value = new Objects.Project (dir);
+            }
+
+            chooser.destroy ();
+            return return_value;
         }
     }
 }

@@ -27,29 +27,80 @@
 
 namespace TrimDown.Widgets.Views {
     public class Writer : Gtk.Grid {
+        public Objects.Project ? current_project { get; private set; default = null; }
+        public Objects.Chapter ? current_chapter { get; private set; default = null; }
 
-        public Objects.Project? current_project { get; private set; default = null; }
+        Widgets.ChapterList chapters;
+        Gtk.Entry title;
+        Gtk.SourceView body;
 
         public Writer () {
             build_ui ();
         }
 
         private void build_ui () {
-
             var chapter_paned = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
             var scene_paned = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
+            chapters = new Widgets.ChapterList ();
+            chapters.chapter_selected.connect (
+                (chapter) => {
+                    if (current_chapter != null) {
+                        current_chapter.save_content (body.buffer.text.strip ());
+                    }
+                    current_chapter = chapter;
+                    title.text = chapter.title;
+                    body.buffer.text = chapter.get_content ();
+                });
 
-            chapter_paned.pack2 (scene_paned, false, false);
+            chapter_paned.add1 (chapters);
+            chapter_paned.add2 (scene_paned);
+
+            var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+            box.get_style_context ().add_class ("card");
+            box.margin = 12;
+
+            title = new Gtk.Entry ();
+            title.get_style_context ().add_class ("flat");
+            title.get_style_context ().add_class ("h2");
+            title.xalign = 0.5f;
+            title.changed.connect (
+                () => {
+                    if (current_chapter != null) {
+                        current_chapter.set_new_title (title.text);
+                    }
+                });
+            box.pack_start (title, false, false);
+
+            var body_scroll = new Gtk.ScrolledWindow (null, null);
+            body_scroll.expand = true;
+
+            body = new Gtk.SourceView ();
+            body_scroll.add (body);
+
+            box.pack_end (body_scroll, true, true);
+
+            scene_paned.pack1 (box, true, true);
 
             this.add (chapter_paned);
+            this.show_all ();
         }
 
         public void show_project (Objects.Project project) {
             if (current_project == project) {
                 return;
             }
+            if (current_project != null) {
+                current_project.chapter_created.disconnect (chapter_created);
+            }
+            current_project = project;
+            chapters.show_chapters (project);
 
+            current_project.chapter_created.connect_after (chapter_created);
+        }
 
+        private void chapter_created (Objects.Chapter chapter) {
+            title.grab_focus ();
+            title.select_region (0, chapter.title.length);
         }
     }
 }

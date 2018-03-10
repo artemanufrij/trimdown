@@ -16,6 +16,7 @@ c_args = [
 deps = [
   dependency('granite'),
   dependency('gtk+-3.0'),
+  dependency('gtksourceview-3.0'),
   meson.get_compiler('vala').find_library('posix')
 ]
 
@@ -35,6 +36,7 @@ executable(
     'src/Objects/Project.vala',
     'src/Widgets/Scene.vala',
     'src/Widgets/Chapter.vala',
+    'src/Widgets/ChapterList.vala',
     'src/Widgets/Views/Writer.vala',
     'src/Widgets/Views/Welcome.vala',
     'src/Dialogs/NewProject.vala',

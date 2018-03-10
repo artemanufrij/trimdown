@@ -32,6 +32,9 @@ namespace TrimDown {
 
         Gtk.HeaderBar headerbar;
         Gtk.Stack content;
+        Gtk.MenuButton app_menu;
+        Gtk.Button open_proj;
+        Gtk.Button new_proj;
 
         Widgets.Views.Writer writer;
 
@@ -41,7 +44,20 @@ namespace TrimDown {
         }
 
         public MainWindow () {
+            load_settings ();
             build_ui ();
+            this.configure_event.connect (
+                (event) => {
+                    settings.window_width = event.width;
+                    settings.window_height = event.height;
+                    return false;
+                });
+
+            this.delete_event.connect (
+                () => {
+                    save_settings ();
+                    return false;
+                });
         }
 
         private void build_ui () {
@@ -51,20 +67,37 @@ namespace TrimDown {
             headerbar.get_style_context ().add_class ("default-decoration");
             this.set_titlebar (headerbar);
 
+            new_proj = new Gtk.Button.from_icon_name ("document-new", Gtk.IconSize.LARGE_TOOLBAR);
+            new_proj.clicked.connect (create_project_action);
+            headerbar.pack_start (new_proj);
+
+            open_proj = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR);
+            open_proj.clicked.connect (open_project_action);
+            headerbar.pack_start (open_proj);
+
+            // SETTINGS MENU
+            app_menu = new Gtk.MenuButton ();
+            app_menu.valign = Gtk.Align.CENTER;
+            app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR));
+
+            var settings_menu = new Gtk.Menu ();
+
+            var menu_item_preferences = new Gtk.MenuItem.with_label (_ ("Preferences"));
+            menu_item_preferences.activate.connect (
+                () => {
+                });
+            settings_menu.append (menu_item_preferences);
+            settings_menu.show_all ();
+
+            app_menu.popup = settings_menu;
+            headerbar.pack_end (app_menu);
+
+
             content = new Gtk.Stack ();
 
             var welcome = new Widgets.Views.Welcome ();
-            welcome.new_project_clicked.connect (
-                () => {
-                    var new_project = new Dialogs.NewProject (this);
-                    if (new_project.run () == Gtk.ResponseType.ACCEPT) {
-                        var project = project_manager.create_new_project (new_project.project_title, new_project.project_kind);
-                        if (project != null) {
-                            open_project (project);
-                        }
-                    }
-                    new_project.destroy ();
-                });
+            welcome.new_project_clicked.connect (create_project_action);
+            welcome.open_project_clicked.connect (open_project_action);
 
             writer = new Widgets.Views.Writer ();
 
@@ -72,11 +105,50 @@ namespace TrimDown {
             content.add_named (writer, "writer");
             this.add (content);
             this.show_all ();
+            new_proj.hide ();
+            open_proj.hide ();
+        }
+
+        private void open_project_action () {
+            var project = project_manager.open_project ();
+            if (project != null) {
+                    open_project (project);
+            }
+        }
+
+        private void create_project_action () {
+            var new_project = new Dialogs.NewProject (this);
+            if (new_project.run () == Gtk.ResponseType.ACCEPT) {
+                var project = project_manager.create_new_project (new_project.project_title, new_project.project_kind);
+                if (project != null) {
+                    open_project (project);
+                }
+            }
+            new_project.destroy ();
         }
 
         private void open_project (Objects.Project project) {
             writer.show_project (project);
             content.visible_child_name = "writer";
+            open_proj.show ();
+            new_proj.show ();
+        }
+
+        private void load_settings () {
+            this.set_default_size (settings.window_width, settings.window_height);
+
+            if (settings.window_x < 0 || settings.window_y < 0 ) {
+                this.window_position = Gtk.WindowPosition.CENTER;
+            } else {
+                this.move (settings.window_x, settings.window_y);
+            }
+        }
+
+        private void save_settings () {
+            int x, y;
+            this.get_position (out x, out y);
+            settings.window_x = x;
+            settings.window_y = y;
         }
     }
 }

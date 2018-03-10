@@ -28,6 +28,7 @@
 namespace TrimDown.Widgets.Views {
     public class Welcome : Gtk.Grid {
         public signal void new_project_clicked ();
+        public signal void open_project_clicked ();
 
         public Welcome () {
             build_ui ();
@@ -35,16 +36,16 @@ namespace TrimDown.Widgets.Views {
 
         private void build_ui () {
             var welcome = new Granite.Widgets.Welcome (_ ("Title"), _ ("Subtitle."));
+            welcome.append ("document-new", _ ("Create a new Project"), _ ("Write your next best seller."));
             welcome.append ("folder-documents", _ ("Open a Project"), _ ("Open an exists project from your library."));
-            welcome.append ("document-new", _ ("Create a new Project"), _ ("Write next best seller."));
             welcome.activated.connect (
                 (index) => {
                     switch (index) {
                     case 0 :
-
+                        new_project_clicked ();
                         break;
                     case 1 :
-                        new_project_clicked ();
+                        open_project_clicked ();
                         break;
                     }
                 });

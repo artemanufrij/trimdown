@@ -27,6 +27,32 @@
 
 namespace TrimDown.Widgets {
     public class Chapter : Gtk.ListBoxRow {
+        public Objects.Chapter chapter { get; private set; }
 
+        public string title { get { return chapter.title; } }
+        public int order { get { return chapter.order; } }
+
+        Gtk.Label label;
+
+        public Chapter (Objects.Chapter chapter) {
+            this.chapter = chapter;
+            this.chapter.title_saved.connect (
+                (new_title) => {
+                    label.label = new_title;
+                });
+
+            build_ui ();
+        }
+
+        private void build_ui () {
+            var content = new Gtk.Grid ();
+            content.margin = 6;
+            label = new Gtk.Label (chapter.title);
+
+            content.attach (label, 0, 0);
+
+            this.add (content);
+            this.show_all ();
+        }
     }
 }
