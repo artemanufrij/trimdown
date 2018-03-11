@@ -52,7 +52,7 @@ namespace TrimDown.Widgets {
 
             var action_toolbar = new Gtk.ActionBar ();
             action_toolbar.get_style_context ().add_class (Gtk.STYLE_CLASS_INLINE_TOOLBAR);
-            var add_button = new Gtk.Button.from_icon_name ("list-add-symbolic");
+            var add_button = new Gtk.Button.from_icon_name ("document-new-symbolic");
             add_button.tooltip_text = _ ("Add a Chapter");
             add_button.clicked.connect (
                 () => {

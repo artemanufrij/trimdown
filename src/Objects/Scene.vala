@@ -26,7 +26,81 @@
  */
 
 namespace TrimDown.Objects {
-    public class Scene : GLib.Object {
+    public class Scene : BaseObject {
 
+        public Chapter parent { get; private set; }
+
+        string content_path;
+
+        public Scene (Chapter chapter, string title, int order = 0) {
+            this.parent = chapter;
+            this.title = title;
+            this.order = order;
+
+            path = Path.build_filename (parent.scenes_path, title);
+            properties_path = Path.build_filename (path, "properties");
+            content_path = Path.build_filename (path, "content");
+
+            load_properties ();
+        }
+
+        private void load_properties () {
+            if (!FileUtils.test (path, FileTest.EXISTS)) {
+                DirUtils.create_with_parents (path, 0755);
+            }
+
+            if (!FileUtils.test (properties_path, FileTest.EXISTS)) {
+                try {
+                    FileUtils.set_contents (properties_path, Utils.get_new_scene_property (title, order));
+                } catch (Error err) {
+                    warning (err.message);
+                    return;
+                }
+            }
+
+            if (!FileUtils.test (content_path, FileTest.EXISTS)) {
+                try {
+                    FileUtils.set_contents (content_path, "");
+                } catch (Error err) {
+                    warning (err.message);
+                    return;
+                }
+            }
+
+            properties = new KeyFile ();
+            try {
+                properties.load_from_file (properties_path, KeyFileFlags.NONE);
+            } catch (Error err) {
+                    warning (err.message);
+                return;
+            }
+
+            title = get_string_property ("General", "title");
+            order = get_integer_property ("General", "order");
+        }
+
+        public string get_content () {
+            string content = "";
+            try {
+                FileUtils.get_contents (content_path, out content);
+            } catch (Error err) {
+                warning (err.message);
+            }
+
+            return content;
+        }
+
+        public bool save_content (string content) {
+            try {
+                FileUtils.set_contents (content_path, content);
+            } catch (Error err) {
+                warning (err.message);
+                return false;
+            }
+
+            content_saved ();
+
+            return true;
+        }
     }
 }

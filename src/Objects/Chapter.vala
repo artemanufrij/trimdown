@@ -26,71 +26,41 @@
  */
 
 namespace TrimDown.Objects {
-    public class Chapter : GLib.Object {
-        public signal void content_saved ();
-        public signal void title_saved (string title);
+    public class Chapter : BaseObject {
+        public Project parent { get; private set; }
+        public string scenes_path { get; private set; }
 
-        public Objects.Project parent { get; private set; }
-        public string title { get; private set; }
-        public int order { get; private set; }
-
-        string chapter_root;
-        string content_path;
-        string properties_path;
-        KeyFile properties;
+        GLib.List<Scene> ? _scenes = null;
+        public GLib.List<Scene> scenes {
+            get {
+                if (_scenes == null) {
+                    _scenes = get_scene_collection ();
+                }
+                return _scenes;
+            }
+        }
 
         public Chapter (Objects.Project project, string title = "", int order = 0) {
             this.parent = project;
             this.title = title;
             this.order = order;
 
-            chapter_root = Path.build_filename (parent.path, "Chapters", title);
-            properties_path = Path.build_filename (chapter_root, "properties");
-            content_path = Path.build_filename (chapter_root, "content");
+            path = Path.build_filename (parent.chapters_path, title);
+            properties_path = Path.build_filename (path, "properties");
+            scenes_path = Path.build_filename (path, "Scenes");
+
             load_properties ();
         }
 
-        public string get_content () {
-            string content = "";
-            try {
-                FileUtils.get_contents (content_path, out content);
-            } catch (Error err) {
-                    warning (err.message);
-            }
-
-            return content;
-        }
-
-        public bool save_content (string content) {
-            try {
-                FileUtils.set_contents (content_path, content);
-            } catch (Error err) {
-                    warning (err.message);
-                return false;
-            }
-
-            content_saved ();
-
-            return true;
-        }
-
         private void load_properties () {
-            if (!FileUtils.test (chapter_root, FileTest.EXISTS)) {
-                DirUtils.create_with_parents (chapter_root, 0755);
+            if (!FileUtils.test (path, FileTest.EXISTS)) {
+                var basic_struct = Path.build_filename (path, "Scenes");
+                DirUtils.create_with_parents (basic_struct, 0755);
             }
 
             if (!FileUtils.test (properties_path, FileTest.EXISTS)) {
                 try {
                     FileUtils.set_contents (properties_path, Utils.get_new_chapter_property (title, order));
-                } catch (Error err) {
-                    warning (err.message);
-                    return;
-                }
-            }
-
-            if (!FileUtils.test (content_path, FileTest.EXISTS)) {
-                try {
-                    FileUtils.set_contents (content_path, "");
                 } catch (Error err) {
                     warning (err.message);
                     return;
@@ -109,44 +79,30 @@ namespace TrimDown.Objects {
             order = get_integer_property ("General", "order");
         }
 
-        private string get_string_property (string group, string key) {
+        private GLib.List<Scene> get_scene_collection () {
+            GLib.List<Scene> return_value = new GLib.List<Scene> ();
+
+            var directory = File.new_for_path (scenes_path);
             try {
-                return properties.get_string (group, key);
+                var children = directory.enumerate_children ("standard::*," + FileAttribute.STANDARD_CONTENT_TYPE, GLib.FileQueryInfoFlags.NONE);
+                FileInfo file_info = null;
+
+                while ((file_info = children.next_file ()) != null) {
+                    if (file_info.get_file_type () == FileType.DIRECTORY) {
+                        var scene = new Scene (this, file_info.get_name ());
+                        return_value.append (scene);
+                    }
+                }
             } catch (Error err) {
                     warning (err.message);
             }
 
-            return "";
+            return return_value;
         }
 
-        private int get_integer_property (string group, string key) {
-            try {
-                return properties.get_integer (group, key);
-            } catch (Error err) {
-                    warning (err.message);
-            }
-
-            return 0;
-        }
-
-        private bool set_string_property (string group, string key, string val) {
-            properties.set_string (group, key, val);
-            try {
-                properties.save_to_file (properties_path);
-            } catch (Error err) {
-                    warning (err.message);
-                return false;
-            }
-
-            return true;
-        }
-
-        public void set_new_title (string new_title) {
-            if (set_string_property ("General", "title", new_title)) {
-                title = new_title;
-            }
-
-            title_saved (title);
+        public Scene create_new_scene (string title, int order) {
+            var new_scene = new Scene (this, title, order);
+            return new_scene;
         }
     }
 }

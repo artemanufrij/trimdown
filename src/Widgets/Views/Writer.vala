@@ -29,44 +29,48 @@ namespace TrimDown.Widgets.Views {
     public class Writer : Gtk.Grid {
         public Objects.Project ? current_project { get; private set; default = null; }
         public Objects.Chapter ? current_chapter { get; private set; default = null; }
+        public Objects.Scene ? current_scene { get; private set; default = null; }
 
         Widgets.ChapterList chapters;
+        Widgets.SceneList scenes;
         Gtk.Entry title;
         Gtk.SourceView body;
 
         public Writer () {
+            TrimDownApp.instance.mainwindow.delete_event.connect (
+                () => {
+                    if (current_scene != null) {
+                        current_scene.save_content (body.buffer.text.strip ());
+                    }
+                    return false;
+                });
+
             build_ui ();
         }
 
         private void build_ui () {
             var chapter_paned = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
             var scene_paned = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
+
             chapters = new Widgets.ChapterList ();
-            chapters.chapter_selected.connect (
-                (chapter) => {
-                    if (current_chapter != null) {
-                        current_chapter.save_content (body.buffer.text.strip ());
-                    }
-                    current_chapter = chapter;
-                    title.text = chapter.title;
-                    body.buffer.text = chapter.get_content ();
-                });
+            chapters.chapter_selected.connect (show_chapter);
 
             chapter_paned.add1 (chapters);
             chapter_paned.add2 (scene_paned);
 
             var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
             box.get_style_context ().add_class ("card");
-            box.margin = 12;
+            box.margin = 24;
+            box.expand = true;
 
             title = new Gtk.Entry ();
-            title.get_style_context ().add_class ("flat");
+            title.has_frame = false;
             title.get_style_context ().add_class ("h2");
             title.xalign = 0.5f;
             title.changed.connect (
                 () => {
-                    if (current_chapter != null) {
-                        current_chapter.set_new_title (title.text);
+                    if (current_scene != null) {
+                        current_scene.set_new_title (title.text);
                     }
                 });
             box.pack_start (title, false, false);
@@ -75,11 +79,18 @@ namespace TrimDown.Widgets.Views {
             body_scroll.expand = true;
 
             body = new Gtk.SourceView ();
+            body.wrap_mode = Gtk.WrapMode.WORD_CHAR;
+            body.top_margin = body.bottom_margin = 24;
+            body.left_margin = body.right_margin = 48;
             body_scroll.add (body);
 
             box.pack_end (body_scroll, true, true);
 
+            scenes = new Widgets.SceneList ();
+            scenes.scene_selected.connect (show_scene);
+
             scene_paned.pack1 (box, true, true);
+            scene_paned.pack2 (scenes, false, false);
 
             this.add (chapter_paned);
             this.show_all ();
@@ -96,6 +107,22 @@ namespace TrimDown.Widgets.Views {
             chapters.show_chapters (project);
 
             current_project.chapter_created.connect_after (chapter_created);
+        }
+
+        private void show_chapter (Objects.Chapter chapter) {
+            if (current_chapter == chapter) {
+                return;
+            }
+            scenes.show_scenes (chapter);
+        }
+
+        private void show_scene (Objects.Scene scene) {
+            if (current_scene != null) {
+                current_scene.save_content (body.buffer.text.strip ());
+            }
+            current_scene = scene;
+            title.text = scene.title;
+            body.buffer.text = scene.get_content ();
         }
 
         private void chapter_created (Objects.Chapter chapter) {

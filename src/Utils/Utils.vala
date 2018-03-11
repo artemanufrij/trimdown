@@ -37,6 +37,15 @@ kind=""" + kind + """
         return """[General]
 title=""" + title + """
 order=""" + order.to_string () + """
+bin=false
+""";
+    }
+
+    public static string get_new_scene_property (string title, int order) {
+        return """[General]
+title=""" + title + """
+order=""" + order.to_string () + """
+bin=false
 """;
     }
 }
