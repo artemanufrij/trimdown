@@ -50,15 +50,14 @@ namespace TrimDown.Objects {
 
             path = Path.build_filename (parent.chapters_path, name);
             properties_path = Path.build_filename (path, "properties");
-            scenes_path = Path.build_filename (path, "Scenes");
+            scenes_path = Path.build_filename (path, _("Scenes"));
 
             load_properties ();
         }
 
         private void load_properties () {
             if (!FileUtils.test (path, FileTest.EXISTS)) {
-                var basic_struct = Path.build_filename (path, "Scenes");
-                DirUtils.create_with_parents (basic_struct, 0755);
+                DirUtils.create_with_parents (scenes_path, 0755);
             }
 
             if (!FileUtils.test (properties_path, FileTest.EXISTS)) {
@@ -113,7 +112,7 @@ namespace TrimDown.Objects {
             int i = 1;
             string new_scene_name = "";
             do {
-                new_scene_name = "Scene %d".printf (i);
+                new_scene_name = _("Scene %d").printf (i);
                 i++;
             } while (FileUtils.test (Path.build_filename (scenes_path, new_scene_name), FileTest.EXISTS));
 

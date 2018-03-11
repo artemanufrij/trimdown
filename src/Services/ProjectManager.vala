@@ -58,11 +58,11 @@ namespace TrimDown.Services {
         public Objects.Project ? create_new_project (string title, string kind = "") {
             var project_path = Path.build_filename (settings.projects_location, title);
             if (!FileUtils.test (project_path, FileTest.EXISTS)) {
-                var basic_struct = Path.build_filename (project_path, "Chapters");
+                var basic_struct = Path.build_filename (project_path, _("Chapters"));
                 DirUtils.create_with_parents (basic_struct, 0755);
 
                 var new_project = new Objects.Project (project_path, kind);
-                new_project.create_new_chapter ("Prologue", 0);
+                new_project.create_new_chapter (_("Prologue"), 0);
                 return new_project;
             }
 

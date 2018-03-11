@@ -42,6 +42,26 @@ namespace TrimDown {
         construct {
             this.application_id = "com.github.artemanufrij.trimdown";
             settings = Settings.get_default ();
+
+            var action_new_chapter = new SimpleAction ("new-chapter", null);
+            add_action (action_new_chapter);
+            add_accelerator ("<Control><Shift>c", "app.new-chapter", null);
+            action_new_chapter.activate.connect (
+                () => {
+                    if (mainwindow != null) {
+                        mainwindow.new_chapter_action ();
+                    }
+                });
+
+            var action_new_scene = new SimpleAction ("new-scene", null);
+            add_action (action_new_scene);
+            add_accelerator ("<Control><Shift>s", "app.new-scene", null);
+            action_new_scene.activate.connect (
+                () => {
+                    if (mainwindow != null) {
+                        mainwindow.new_scene_action ();
+                    }
+                });
         }
 
         private TrimDownApp () {

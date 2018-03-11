@@ -48,7 +48,7 @@ namespace TrimDown.Objects {
             this.kind = kind;
             this.title = Path.get_basename (path);
 
-            chapters_path = Path.build_filename (path, "Chapters");
+            chapters_path = Path.build_filename (path, _("Chapters"));
 
             load_properties ();
         }
@@ -98,7 +98,7 @@ namespace TrimDown.Objects {
 
         public Chapter create_new_chapter (string name, int order) {
             var new_chapter = new Chapter (this, name, order);
-            new_chapter.create_new_scene ("Scene 1", 0);
+            new_chapter.create_new_scene (_("Scene %d").printf (1), 0);
             return new_chapter;
         }
 
@@ -106,7 +106,7 @@ namespace TrimDown.Objects {
             int i = 1;
             string new_chapter_name = "";
             do {
-                new_chapter_name = "Chapter %d".printf (i);
+                new_chapter_name = _("Chapter %d").printf (i);
                 i++;
             } while (FileUtils.test (Path.build_filename (chapters_path, new_chapter_name), FileTest.EXISTS));
 

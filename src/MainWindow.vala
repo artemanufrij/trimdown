@@ -127,6 +127,18 @@ namespace TrimDown {
             new_project.destroy ();
         }
 
+        public void new_chapter_action () {
+            if (content.visible_child_name == "writer" && writer.current_project != null) {
+                writer.current_project.generate_new_chapter ();
+            }
+        }
+
+        public void new_scene_action () {
+            if (content.visible_child_name == "writer" && writer.current_chapter != null) {
+                writer.current_chapter.generate_new_scene ();
+            }
+        }
+
         private void open_project (Objects.Project project) {
             headerbar.title = project.title;
             writer.show_project (project);

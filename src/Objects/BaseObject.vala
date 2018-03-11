@@ -45,7 +45,6 @@ namespace TrimDown.Objects {
             } catch (Error err) {
                     warning (err.message);
             }
-
             return "";
         }
 
@@ -55,7 +54,6 @@ namespace TrimDown.Objects {
             } catch (Error err) {
                     warning (err.message);
             }
-
             return 0;
         }
 
@@ -67,7 +65,6 @@ namespace TrimDown.Objects {
                     warning (err.message);
                 return false;
             }
-
             return true;
         }
 
@@ -75,7 +72,6 @@ namespace TrimDown.Objects {
             if (set_string_property ("General", "title", new_title)) {
                title = new_title;
             }
-
             title_saved (title);
         }
     }

@@ -87,7 +87,6 @@ namespace TrimDown.Objects {
             } catch (Error err) {
                 warning (err.message);
             }
-
             return content;
         }
 
@@ -98,9 +97,7 @@ namespace TrimDown.Objects {
                 warning (err.message);
                 return false;
             }
-
             content_saved ();
-
             return true;
         }
     }
