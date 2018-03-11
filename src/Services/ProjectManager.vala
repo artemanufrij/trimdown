@@ -62,7 +62,7 @@ namespace TrimDown.Services {
                 DirUtils.create_with_parents (basic_struct, 0755);
 
                 var new_project = new Objects.Project (project_path, kind);
-                var new_chapter = new_project.create_new_chapter ("Prologue", 0);
+                new_project.create_new_chapter ("Prologue", 0);
                 return new_project;
             }
 

@@ -106,12 +106,11 @@ namespace TrimDown.Objects {
             int i = 1;
             string new_chapter_title = "";
             do {
-                new_chapter_title = "Chapter_%d".printf (i);
+                new_chapter_title = "Chapter %d".printf (i);
                 i++;
             } while (FileUtils.test (Path.build_filename (chapters_path, new_chapter_title), FileTest.EXISTS));
 
             var new_chapter = create_new_chapter (new_chapter_title, i);
-            new_chapter.set_new_title (_("New Chapter"));
             chapter_created (new_chapter);
             return new_chapter;
         }

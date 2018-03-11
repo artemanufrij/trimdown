@@ -128,6 +128,7 @@ namespace TrimDown {
         }
 
         private void open_project (Objects.Project project) {
+            headerbar.title = project.title;
             writer.show_project (project);
             content.visible_child_name = "writer";
             open_proj.show ();

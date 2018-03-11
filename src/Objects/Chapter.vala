@@ -27,6 +27,8 @@
 
 namespace TrimDown.Objects {
     public class Chapter : BaseObject {
+        public signal void scene_created (Scene scene);
+
         public Project parent { get; private set; }
         public string scenes_path { get; private set; }
 
@@ -102,6 +104,20 @@ namespace TrimDown.Objects {
 
         public Scene create_new_scene (string title, int order) {
             var new_scene = new Scene (this, title, order);
+            return new_scene;
+        }
+
+        public Scene generate_new_scene () {
+            int i = 1;
+            string new_scene_title = "";
+            do {
+                new_scene_title = "Scene %d".printf (i);
+                i++;
+            } while (FileUtils.test (Path.build_filename (scenes_path, new_scene_title), FileTest.EXISTS));
+
+            var new_scene = create_new_scene (new_scene_title, i);
+            _scenes.append (new_scene);
+            scene_created (new_scene);
             return new_scene;
         }
     }

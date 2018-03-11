@@ -29,6 +29,9 @@ namespace TrimDown.Widgets {
     public class Scene : Gtk.ListBoxRow {
         public Objects.Scene scene { get; private set; }
 
+        public string title { get { return scene.title; } }
+        public int order { get { return scene.order; } }
+
         Gtk.Label label;
 
         public Scene (Objects.Scene scene) {

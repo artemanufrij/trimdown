@@ -50,13 +50,13 @@ namespace TrimDown.Widgets.Views {
 
         private void build_ui () {
             var chapter_paned = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
-            var scene_paned = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
+            var writer = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 
             chapters = new Widgets.ChapterList ();
             chapters.chapter_selected.connect (show_chapter);
 
             chapter_paned.add1 (chapters);
-            chapter_paned.add2 (scene_paned);
+            chapter_paned.add2 (writer);
 
             var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
             box.get_style_context ().add_class ("card");
@@ -89,8 +89,8 @@ namespace TrimDown.Widgets.Views {
             scenes = new Widgets.SceneList ();
             scenes.scene_selected.connect (show_scene);
 
-            scene_paned.pack1 (box, true, true);
-            scene_paned.pack2 (scenes, false, false);
+            writer.pack_start (box, true, true);
+            writer.pack_start (scenes, false, false);
 
             this.add (chapter_paned);
             this.show_all ();

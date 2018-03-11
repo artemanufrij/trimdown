@@ -39,9 +39,12 @@ namespace TrimDown.Widgets {
 
         private void build_ui () {
             this.width_request = 150;
+            this.expand = false;
+            this.margin = 24;
+            this.margin_left = 0;
 
             scenes = new Gtk.ListBox ();
-          //  scenes.set_sort_func (scenes_sort_func);
+            scenes.set_sort_func (scenes_sort_func);
             scenes.selected_rows_changed.connect (
                 () => {
                     scene_selected ((scenes.get_selected_row () as Widgets.Scene).scene);
@@ -51,7 +54,27 @@ namespace TrimDown.Widgets {
             scroll.expand = true;
             scroll.add (scenes);
 
-            this.attach (scroll, 0, 0);
+            var action_toolbar = new Gtk.ActionBar ();
+            action_toolbar.get_style_context ().add_class (Gtk.STYLE_CLASS_INLINE_TOOLBAR);
+            var add_button = new Gtk.Button.from_icon_name ("accessories-text-editor-symbolic");
+            add_button.tooltip_text = _ ("Add a Scene");
+            add_button.clicked.connect (
+                () => {
+                    if (current_chapter != null) {
+                        current_chapter.generate_new_scene ();
+                    }
+                });
+            action_toolbar.pack_start (add_button);
+
+            var frame = new Gtk.Frame (null);
+
+            var grid = new Gtk.Grid ();
+            grid.attach (scroll, 0, 0);
+            grid.attach (action_toolbar, 0, 1);
+
+            frame.add (grid);
+
+            this.attach (frame, 0, 0);
         }
 
         public void show_scenes (Objects.Chapter chapter) {
@@ -60,7 +83,7 @@ namespace TrimDown.Widgets {
             }
 
             if (current_chapter != null) {
-                // current_chapter.scene_created.disconnect (add_scene);
+                current_chapter.scene_created.disconnect (add_scene);
             }
 
             reset ();
@@ -75,13 +98,31 @@ namespace TrimDown.Widgets {
                 scenes.get_children ().first ().data.activate ();
             }
 
-           // current_chapter.scene_created.connect (add_scene);
+            current_chapter.scene_created.connect (add_scene);
         }
 
         public void reset () {
             foreach (var child in scenes.get_children ()) {
                 child.destroy ();
             }
+        }
+
+        public void add_scene (Objects.Scene scene) {
+            var item = new Widgets.Scene (scene);
+            scenes.add (item);
+            item.activate ();
+        }
+
+        private int scenes_sort_func (Gtk.ListBoxRow child1, Gtk.ListBoxRow child2) {
+            var item1 = (Widgets.Scene)child1;
+            var item2 = (Widgets.Scene)child2;
+            if (item1 != null && item2 != null) {
+                if (item1.order != item2.order) {
+                    return item1.order - item2.order;
+                }
+                return item1.title.collate (item2.title);
+            }
+            return 0;
         }
     }
 }
