@@ -27,6 +27,9 @@
 
 namespace TrimDown.Objects {
     public class Note : GLib.Object {
+        public signal void renamed (string title);
+        public signal void removed ();
+
         public string title { get; set; }
 
         public Chapter parent { get; private set; }
@@ -58,7 +61,7 @@ namespace TrimDown.Objects {
             try {
                 FileUtils.get_contents (content_path, out content);
             } catch (Error err) {
-                warning (err.message);
+                    warning (err.message);
             }
             return content;
         }
@@ -67,9 +70,38 @@ namespace TrimDown.Objects {
             try {
                 FileUtils.set_contents (content_path, content);
             } catch (Error err) {
+                    warning (err.message);
+                return false;
+            }
+            return true;
+        }
+
+        public bool rename (string new_title) {
+            var new_path = Path.build_filename (parent.notes_path, new_title);
+
+            if (FileUtils.test (new_path, FileTest.EXISTS)) {
+                return false;
+            }
+
+            FileUtils.rename (content_path, new_path);
+            title = new_title;
+            content_path = new_path;
+
+            renamed (title);
+            return true;
+        }
+
+        public bool trash () {
+            File file = File.new_for_path (content_path);
+            try {
+                if (file.trash ()) {
+                    removed ();
+                }
+            } catch (Error err) {
                 warning (err.message);
                 return false;
             }
+
             return true;
         }
     }

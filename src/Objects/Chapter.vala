@@ -28,6 +28,7 @@
 namespace TrimDown.Objects {
     public class Chapter : BaseObject {
         public signal void scene_created (Scene scene);
+        public signal void note_created (Note note);
 
         public Project parent { get; private set; }
         public string scenes_path { get; private set; }
@@ -128,6 +129,10 @@ namespace TrimDown.Objects {
                 while ((file_info = children.next_file ()) != null) {
                     if (file_info.get_content_type () == "text/plain") {
                         var note = new Note (this, file_info.get_name ());
+                        note.removed.connect (
+                            () => {
+                                _notes.remove (note);
+                            });
                         return_value.append (note);
                     }
                 }
@@ -158,6 +163,24 @@ namespace TrimDown.Objects {
 
         public Note create_new_note (string title) {
             var new_note = new Note (this, title);
+            return new_note;
+        }
+
+        public Note generate_new_note () {
+            int i = 1;
+            string new_note_name = "";
+            do {
+                new_note_name = _ ("Note %d").printf (i);
+                i++;
+            } while (FileUtils.test (Path.build_filename (scenes_path, new_note_name), FileTest.EXISTS));
+
+            var new_note = create_new_note (new_note_name);
+            _notes.append (new_note);
+            new_note.removed.connect (
+                () => {
+                    _notes.remove (new_note);
+                });
+            note_created (new_note);
             return new_note;
         }
     }

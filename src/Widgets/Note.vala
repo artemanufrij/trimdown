@@ -29,11 +29,21 @@ namespace TrimDown.Widgets {
     public class Note : Gtk.ListBoxRow {
         public Objects.Note note { get; private set; }
 
+        public string title { get { return note.title; } }
+
         Gtk.Label label;
 
         public Note (Objects.Note note) {
             this.note = note;
-
+            this.note.renamed.connect (
+                (new_title) => {
+                    label.label = new_title;
+                    (this.parent as Gtk.ListBox).invalidate_sort ();
+                });
+            this.note.removed.connect (
+                ()=> {
+                    this.dispose ();
+                });
             build_ui ();
         }
 

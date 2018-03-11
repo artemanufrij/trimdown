@@ -35,6 +35,7 @@ namespace TrimDown {
         Gtk.MenuButton app_menu;
         Gtk.Button open_proj;
         Gtk.Button new_proj;
+        Gtk.Button notes_button;
 
         Widgets.Views.Writer writer;
 
@@ -95,9 +96,13 @@ namespace TrimDown {
             // NOTES
             var notes = new Widgets.Notes ();
 
-            var notes_button = new Gtk.Button.from_icon_name ("format-text-highlight", Gtk.IconSize.LARGE_TOOLBAR);
+            notes_button = new Gtk.Button.from_icon_name ("format-text-highlight", Gtk.IconSize.LARGE_TOOLBAR);
 
             var notes_popup = new Gtk.Popover (notes_button);
+            notes_popup.closed.connect (
+                () => {
+                    notes.save_note ();
+                });
             notes_popup.add (notes);
             notes_button.clicked.connect (
                 () => {
@@ -122,6 +127,7 @@ namespace TrimDown {
             this.show_all ();
             new_proj.hide ();
             open_proj.hide ();
+            notes_button.hide ();
         }
 
         private void open_project_action () {
@@ -160,6 +166,7 @@ namespace TrimDown {
             content.visible_child_name = "writer";
             open_proj.show ();
             new_proj.show ();
+            notes_button.show ();
         }
 
         private void load_settings () {
