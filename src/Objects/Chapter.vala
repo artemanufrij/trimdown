@@ -31,6 +31,7 @@ namespace TrimDown.Objects {
 
         public Project parent { get; private set; }
         public string scenes_path { get; private set; }
+        public string notes_path { get; private set; }
 
         GLib.List<Scene> ? _scenes = null;
         public GLib.List<Scene> scenes {
@@ -42,6 +43,16 @@ namespace TrimDown.Objects {
             }
         }
 
+        GLib.List<Note> ? _notes = null;
+        public GLib.List<Note> notes {
+            get {
+                if (_notes == null) {
+                    _notes = get_note_collection ();
+                }
+                return _notes;
+            }
+        }
+
         public Chapter (Objects.Project project, string name = "", int order = 0) {
             this.parent = project;
             this.title = name;
@@ -50,14 +61,19 @@ namespace TrimDown.Objects {
 
             path = Path.build_filename (parent.chapters_path, name);
             properties_path = Path.build_filename (path, "properties");
-            scenes_path = Path.build_filename (path, _("Scenes"));
+            scenes_path = Path.build_filename (path, _ ("Scenes"));
+            notes_path = Path.build_filename (path, _ ("Notes"));
 
             load_properties ();
         }
 
         private void load_properties () {
-            if (!FileUtils.test (path, FileTest.EXISTS)) {
+            if (!FileUtils.test (scenes_path, FileTest.EXISTS)) {
                 DirUtils.create_with_parents (scenes_path, 0755);
+            }
+
+            if (!FileUtils.test (notes_path, FileTest.EXISTS)) {
+                DirUtils.create_with_parents (notes_path, 0755);
             }
 
             if (!FileUtils.test (properties_path, FileTest.EXISTS)) {
@@ -69,7 +85,6 @@ namespace TrimDown.Objects {
                 }
             }
 
-            properties = new KeyFile ();
             try {
                 properties.load_from_file (properties_path, KeyFileFlags.NONE);
             } catch (Error err) {
@@ -99,7 +114,26 @@ namespace TrimDown.Objects {
             } catch (Error err) {
                     warning (err.message);
             }
+            return return_value;
+        }
 
+        private GLib.List<Note> get_note_collection () {
+            GLib.List<Note> return_value = new GLib.List<Note> ();
+
+            var directory = File.new_for_path (notes_path);
+            try {
+                var children = directory.enumerate_children ("standard::*," + FileAttribute.STANDARD_CONTENT_TYPE, GLib.FileQueryInfoFlags.NONE);
+                FileInfo file_info = null;
+
+                while ((file_info = children.next_file ()) != null) {
+                    if (file_info.get_content_type () == "text/plain") {
+                        var note = new Note (this, file_info.get_name ());
+                        return_value.append (note);
+                    }
+                }
+            } catch (Error err) {
+                    warning (err.message);
+            }
             return return_value;
         }
 
@@ -112,7 +146,7 @@ namespace TrimDown.Objects {
             int i = 1;
             string new_scene_name = "";
             do {
-                new_scene_name = _("Scene %d").printf (i);
+                new_scene_name = _ ("Scene %d").printf (i);
                 i++;
             } while (FileUtils.test (Path.build_filename (scenes_path, new_scene_name), FileTest.EXISTS));
 
@@ -120,6 +154,11 @@ namespace TrimDown.Objects {
             _scenes.append (new_scene);
             scene_created (new_scene);
             return new_scene;
+        }
+
+        public Note create_new_note (string title) {
+            var new_note = new Note (this, title);
+            return new_note;
         }
     }
 }

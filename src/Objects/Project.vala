@@ -99,6 +99,7 @@ namespace TrimDown.Objects {
         public Chapter create_new_chapter (string name, int order) {
             var new_chapter = new Chapter (this, name, order);
             new_chapter.create_new_scene (_("Scene %d").printf (1), 0);
+            new_chapter.create_new_note (_("Notes"));
             return new_chapter;
         }
 

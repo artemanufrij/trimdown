@@ -92,6 +92,21 @@ namespace TrimDown {
             app_menu.popup = settings_menu;
             headerbar.pack_end (app_menu);
 
+            // NOTES
+            var notes = new Widgets.Notes ();
+
+            var notes_button = new Gtk.Button.from_icon_name ("format-text-highlight", Gtk.IconSize.LARGE_TOOLBAR);
+
+            var notes_popup = new Gtk.Popover (notes_button);
+            notes_popup.add (notes);
+            notes_button.clicked.connect (
+                () => {
+                    if (writer.current_chapter != null) {
+                        notes.show_notes (writer.current_chapter);
+                    }
+                    notes_popup.show_all ();
+                });
+            headerbar.pack_end (notes_button);
 
             content = new Gtk.Stack ();
 
@@ -112,7 +127,7 @@ namespace TrimDown {
         private void open_project_action () {
             var project = project_manager.open_project ();
             if (project != null) {
-                    open_project (project);
+                open_project (project);
             }
         }
 

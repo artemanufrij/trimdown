@@ -36,14 +36,17 @@ namespace TrimDown.Objects {
         public int order { get; protected set; }
 
         protected string properties_path;
-
         protected KeyFile properties;
+
+        construct {
+            properties = new KeyFile ();
+        }
 
         protected string get_string_property (string group, string key) {
             try {
                 return properties.get_string (group, key);
             } catch (Error err) {
-                    warning (err.message);
+                warning (err.message);
             }
             return "";
         }
@@ -52,7 +55,7 @@ namespace TrimDown.Objects {
             try {
                 return properties.get_integer (group, key);
             } catch (Error err) {
-                    warning (err.message);
+                warning (err.message);
             }
             return 0;
         }
@@ -62,7 +65,7 @@ namespace TrimDown.Objects {
             try {
                 properties.save_to_file (properties_path);
             } catch (Error err) {
-                    warning (err.message);
+                warning (err.message);
                 return false;
             }
             return true;
