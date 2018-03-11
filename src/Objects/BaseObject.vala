@@ -32,6 +32,7 @@ namespace TrimDown.Objects {
 
         public string path { get; protected set; }
         public string title { get; protected set; }
+        public string name { get; protected set; }
         public int order { get; protected set; }
 
         protected string properties_path;
@@ -72,7 +73,7 @@ namespace TrimDown.Objects {
 
         public void set_new_title (string new_title) {
             if (set_string_property ("General", "title", new_title)) {
-                title = new_title;
+               title = new_title;
             }
 
             title_saved (title);

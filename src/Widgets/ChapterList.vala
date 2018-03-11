@@ -43,7 +43,9 @@ namespace TrimDown.Widgets {
             chapters.set_sort_func (chapters_sort_func);
             chapters.selected_rows_changed.connect (
                 () => {
-                    chapter_selected ((chapters.get_selected_row () as Widgets.Chapter).chapter);
+                    if (chapters.get_selected_row () is Widgets.Chapter) {
+                        chapter_selected ((chapters.get_selected_row () as Widgets.Chapter).chapter);
+                    }
                 });
 
             var scroll = new Gtk.ScrolledWindow (null, null);
@@ -106,8 +108,7 @@ namespace TrimDown.Widgets {
             var item1 = (Widgets.Chapter)child1;
             var item2 = (Widgets.Chapter)child2;
             if (item1 != null && item2 != null) {
-
-                if (item1.order != item2.order){
+                if (item1.order != item2.order) {
                     return item1.order - item2.order;
                 }
                 return item1.title.collate (item2.title);

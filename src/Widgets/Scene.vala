@@ -29,23 +29,19 @@ namespace TrimDown.Widgets {
     public class Scene : Gtk.ListBoxRow {
         public Objects.Scene scene { get; private set; }
 
-        public string title { get { return scene.title; } }
+        public new string name { get { return scene.name; } }
         public int order { get { return scene.order; } }
 
         Gtk.Label label;
 
         public Scene (Objects.Scene scene) {
             this.scene = scene;
-            this.scene.title_saved.connect (
-                (new_title) => {
-                    label.label = new_title;
-                });
 
             build_ui ();
         }
 
         private void build_ui () {
-            label = new Gtk.Label (scene.title);
+            label = new Gtk.Label (scene.name);
             label.margin = 12;
 
             this.add (label);

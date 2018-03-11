@@ -69,8 +69,8 @@ namespace TrimDown.Widgets.Views {
             title.xalign = 0.5f;
             title.changed.connect (
                 () => {
-                    if (current_scene != null) {
-                        current_scene.set_new_title (title.text);
+                    if (current_chapter != null) {
+                        current_chapter.set_new_title (title.text);
                     }
                 });
             box.pack_start (title, false, false);
@@ -113,7 +113,9 @@ namespace TrimDown.Widgets.Views {
             if (current_chapter == chapter) {
                 return;
             }
+            current_chapter = chapter;
             scenes.show_scenes (chapter);
+            title.text = chapter.title;
         }
 
         private void show_scene (Objects.Scene scene) {
@@ -121,7 +123,6 @@ namespace TrimDown.Widgets.Views {
                 current_scene.save_content (body.buffer.text.strip ());
             }
             current_scene = scene;
-            title.text = scene.title;
             body.buffer.text = scene.get_content ();
         }
 

@@ -96,21 +96,21 @@ namespace TrimDown.Objects {
             return return_value;
         }
 
-        public Chapter create_new_chapter (string title, int order) {
-            var new_chapter = new Chapter (this, title, order);
+        public Chapter create_new_chapter (string name, int order) {
+            var new_chapter = new Chapter (this, name, order);
             new_chapter.create_new_scene ("Scene 1", 0);
             return new_chapter;
         }
 
         public Chapter generate_new_chapter () {
             int i = 1;
-            string new_chapter_title = "";
+            string new_chapter_name = "";
             do {
-                new_chapter_title = "Chapter %d".printf (i);
+                new_chapter_name = "Chapter %d".printf (i);
                 i++;
-            } while (FileUtils.test (Path.build_filename (chapters_path, new_chapter_title), FileTest.EXISTS));
+            } while (FileUtils.test (Path.build_filename (chapters_path, new_chapter_name), FileTest.EXISTS));
 
-            var new_chapter = create_new_chapter (new_chapter_title, i);
+            var new_chapter = create_new_chapter (new_chapter_name, i);
             chapter_created (new_chapter);
             return new_chapter;
         }

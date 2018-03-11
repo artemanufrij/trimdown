@@ -36,18 +36,13 @@ namespace TrimDown.Widgets {
 
         public Chapter (Objects.Chapter chapter) {
             this.chapter = chapter;
-            this.chapter.title_saved.connect (
-                (new_title) => {
-                    label.label = new_title;
-                });
-
             build_ui ();
         }
 
         private void build_ui () {
             var content = new Gtk.Grid ();
             content.margin = 6;
-            label = new Gtk.Label (chapter.title);
+            label = new Gtk.Label (chapter.name);
 
             content.attach (label, 0, 0);
 

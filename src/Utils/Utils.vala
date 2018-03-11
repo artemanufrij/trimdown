@@ -36,6 +36,7 @@ kind=""" + kind + """
     public static string get_new_chapter_property (string title, int order) {
         return """[General]
 title=""" + title + """
+name=""" + title + """
 order=""" + order.to_string () + """
 bin=false
 """;
@@ -44,6 +45,7 @@ bin=false
     public static string get_new_scene_property (string title, int order) {
         return """[General]
 title=""" + title + """
+name=""" + title + """
 order=""" + order.to_string () + """
 bin=false
 """;

@@ -32,12 +32,13 @@ namespace TrimDown.Objects {
 
         string content_path;
 
-        public Scene (Chapter chapter, string title, int order = 0) {
+        public Scene (Chapter chapter, string name, int order = 0) {
             this.parent = chapter;
-            this.title = title;
+            this.title = name;
             this.order = order;
+            this.name = name;
 
-            path = Path.build_filename (parent.scenes_path, title);
+            path = Path.build_filename (parent.scenes_path, name);
             properties_path = Path.build_filename (path, "properties");
             content_path = Path.build_filename (path, "content");
 
@@ -51,7 +52,7 @@ namespace TrimDown.Objects {
 
             if (!FileUtils.test (properties_path, FileTest.EXISTS)) {
                 try {
-                    FileUtils.set_contents (properties_path, Utils.get_new_scene_property (title, order));
+                    FileUtils.set_contents (properties_path, Utils.get_new_scene_property (name, order));
                 } catch (Error err) {
                     warning (err.message);
                     return;

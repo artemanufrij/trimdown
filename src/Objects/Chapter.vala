@@ -42,12 +42,13 @@ namespace TrimDown.Objects {
             }
         }
 
-        public Chapter (Objects.Project project, string title = "", int order = 0) {
+        public Chapter (Objects.Project project, string name = "", int order = 0) {
             this.parent = project;
-            this.title = title;
+            this.title = name;
+            this.name = name;
             this.order = order;
 
-            path = Path.build_filename (parent.chapters_path, title);
+            path = Path.build_filename (parent.chapters_path, name);
             properties_path = Path.build_filename (path, "properties");
             scenes_path = Path.build_filename (path, "Scenes");
 
@@ -62,7 +63,7 @@ namespace TrimDown.Objects {
 
             if (!FileUtils.test (properties_path, FileTest.EXISTS)) {
                 try {
-                    FileUtils.set_contents (properties_path, Utils.get_new_chapter_property (title, order));
+                    FileUtils.set_contents (properties_path, Utils.get_new_chapter_property (name, order));
                 } catch (Error err) {
                     warning (err.message);
                     return;
@@ -79,6 +80,7 @@ namespace TrimDown.Objects {
 
             title = get_string_property ("General", "title");
             order = get_integer_property ("General", "order");
+            name = get_string_property ("General", "name");
         }
 
         private GLib.List<Scene> get_scene_collection () {
@@ -102,20 +104,20 @@ namespace TrimDown.Objects {
             return return_value;
         }
 
-        public Scene create_new_scene (string title, int order) {
-            var new_scene = new Scene (this, title, order);
+        public Scene create_new_scene (string name, int order) {
+            var new_scene = new Scene (this, name, order);
             return new_scene;
         }
 
         public Scene generate_new_scene () {
             int i = 1;
-            string new_scene_title = "";
+            string new_scene_name = "";
             do {
-                new_scene_title = "Scene %d".printf (i);
+                new_scene_name = "Scene %d".printf (i);
                 i++;
-            } while (FileUtils.test (Path.build_filename (scenes_path, new_scene_title), FileTest.EXISTS));
+            } while (FileUtils.test (Path.build_filename (scenes_path, new_scene_name), FileTest.EXISTS));
 
-            var new_scene = create_new_scene (new_scene_title, i);
+            var new_scene = create_new_scene (new_scene_name, i);
             _scenes.append (new_scene);
             scene_created (new_scene);
             return new_scene;
