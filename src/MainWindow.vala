@@ -36,6 +36,7 @@ namespace TrimDown {
         Gtk.Button open_proj;
         Gtk.Button new_proj;
         Gtk.Button notes_button;
+        Gtk.Button bin_items;
 
         Widgets.Views.Writer writer;
 
@@ -69,10 +70,12 @@ namespace TrimDown {
             this.set_titlebar (headerbar);
 
             new_proj = new Gtk.Button.from_icon_name ("document-new", Gtk.IconSize.LARGE_TOOLBAR);
+            new_proj.tooltip_text = _("New Project");
             new_proj.clicked.connect (create_project_action);
             headerbar.pack_start (new_proj);
 
             open_proj = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR);
+            open_proj.tooltip_text = _("Open Project");
             open_proj.clicked.connect (open_project_action);
             headerbar.pack_start (open_proj);
 
@@ -97,7 +100,7 @@ namespace TrimDown {
             var notes = new Widgets.Notes ();
 
             notes_button = new Gtk.Button.from_icon_name ("format-text-highlight", Gtk.IconSize.LARGE_TOOLBAR);
-
+            notes_button.tooltip_text = _("Chapter Notes");
             var notes_popup = new Gtk.Popover (notes_button);
             notes_popup.closed.connect (
                 () => {
@@ -113,7 +116,8 @@ namespace TrimDown {
                 });
             headerbar.pack_end (notes_button);
 
-            var bin_items = new Gtk.Button.from_icon_name ("user-deleted-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+            bin_items = new Gtk.Button.from_icon_name ("user-trash", Gtk.IconSize.LARGE_TOOLBAR);
+            bin_items.tooltip_text = _("Deleted Items");
             headerbar.pack_end (bin_items);
 
             content = new Gtk.Stack ();
@@ -131,6 +135,7 @@ namespace TrimDown {
             new_proj.hide ();
             open_proj.hide ();
             notes_button.hide ();
+            bin_items.hide ();
         }
 
         private void open_project_action () {
@@ -170,6 +175,7 @@ namespace TrimDown {
             open_proj.show ();
             new_proj.show ();
             notes_button.show ();
+            bin_items.show ();
         }
 
         private void load_settings () {
