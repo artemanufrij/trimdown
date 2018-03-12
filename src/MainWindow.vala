@@ -113,6 +113,9 @@ namespace TrimDown {
                 });
             headerbar.pack_end (notes_button);
 
+            var bin_items = new Gtk.Button.from_icon_name ("user-deleted-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+            headerbar.pack_end (bin_items);
+
             content = new Gtk.Stack ();
 
             var welcome = new Widgets.Views.Welcome ();
