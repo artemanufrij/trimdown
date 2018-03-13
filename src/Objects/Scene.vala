@@ -42,10 +42,10 @@ namespace TrimDown.Objects {
             properties_path = Path.build_filename (path, "properties");
             content_path = Path.build_filename (path, "content");
 
-            load_properties ();
+            init ();
         }
 
-        private void load_properties () {
+        private void init () {
             if (!FileUtils.test (path, FileTest.EXISTS)) {
                 DirUtils.create_with_parents (path, 0755);
             }
@@ -68,16 +68,7 @@ namespace TrimDown.Objects {
                 }
             }
 
-            try {
-                properties.load_from_file (properties_path, KeyFileFlags.NONE);
-            } catch (Error err) {
-                    warning (err.message);
-                return;
-            }
-
-            title = get_string_property ("General", "title");
-            order = get_integer_property ("General", "order");
-            bin = get_boolean_property ("General", "bin");
+            load_properties ();
         }
 
         public string get_content () {

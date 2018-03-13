@@ -51,7 +51,7 @@ namespace TrimDown.Widgets {
             delete_button.opacity = 0;
 
             var delete_event = new Gtk.EventBox ();
-            delete_event.button_release_event.connect (
+            delete_event.button_press_event.connect (
                 (event) => {
                     if (event.button == 1) {
                         chapter.move_into_bin ();
@@ -71,7 +71,7 @@ namespace TrimDown.Widgets {
             var event_box = new Gtk.EventBox ();
             event_box.enter_notify_event.connect (
                 (event) => {
-                    delete_button.opacity = 1;
+                    delete_button.opacity = 0.5;
                     return false;
                 });
             event_box.leave_notify_event.connect (

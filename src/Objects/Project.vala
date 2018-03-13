@@ -50,10 +50,10 @@ namespace TrimDown.Objects {
 
             chapters_path = Path.build_filename (path, _("Chapters"));
 
-            load_properties ();
+            init ();
         }
 
-        private void load_properties () {
+        private void init () {
             var prop = Path.build_filename (path, title + ".td");
             if (!FileUtils.test (prop, FileTest.EXISTS)) {
                 try {
@@ -64,15 +64,8 @@ namespace TrimDown.Objects {
                 }
             }
 
-            properties = new KeyFile ();
-            try {
-                properties.load_from_file (prop, KeyFileFlags.NONE);
-            } catch (Error err) {
-                    warning (err.message);
-                return;
-            }
+            load_properties ();
 
-            title = get_string_property ("General", "title");
             kind = get_string_property ("General", "kind");
         }
 

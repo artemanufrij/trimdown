@@ -65,10 +65,10 @@ namespace TrimDown.Objects {
             scenes_path = Path.build_filename (path, _ ("Scenes"));
             notes_path = Path.build_filename (path, _ ("Notes"));
 
-            load_properties ();
+            init ();
         }
 
-        private void load_properties () {
+        private void init () {
             if (!FileUtils.test (scenes_path, FileTest.EXISTS)) {
                 DirUtils.create_with_parents (scenes_path, 0755);
             }
@@ -77,26 +77,7 @@ namespace TrimDown.Objects {
                 DirUtils.create_with_parents (notes_path, 0755);
             }
 
-            if (!FileUtils.test (properties_path, FileTest.EXISTS)) {
-                try {
-                    FileUtils.set_contents (properties_path, Utils.get_new_chapter_property (name, order));
-                } catch (Error err) {
-                    warning (err.message);
-                    return;
-                }
-            }
-
-            try {
-                properties.load_from_file (properties_path, KeyFileFlags.NONE);
-            } catch (Error err) {
-                    warning (err.message);
-                return;
-            }
-
-            title = get_string_property ("General", "title");
-            order = get_integer_property ("General", "order");
-            name = get_string_property ("General", "name");
-            bin = get_boolean_property ("General", "bin");
+            load_properties ();
         }
 
         private GLib.List<Scene> get_scene_collection () {

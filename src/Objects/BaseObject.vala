@@ -44,6 +44,29 @@ namespace TrimDown.Objects {
             properties = new KeyFile ();
         }
 
+        protected void load_properties () {
+            if (!FileUtils.test (properties_path, FileTest.EXISTS)) {
+                try {
+                    FileUtils.set_contents (properties_path, Utils.get_new_chapter_property (name, order));
+                } catch (Error err) {
+                    warning (err.message);
+                    return;
+                }
+            }
+
+            try {
+                properties.load_from_file (properties_path, KeyFileFlags.NONE);
+            } catch (Error err) {
+                    warning (err.message);
+                return;
+            }
+
+            title = get_string_property ("General", "title");
+            order = get_integer_property ("General", "order");
+            name = get_string_property ("General", "name");
+            bin = get_boolean_property ("General", "bin");
+        }
+
         public void move_into_bin () {
             if (set_boolean_property ("General", "bin", true)) {
                 bin = true;
