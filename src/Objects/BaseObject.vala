@@ -61,7 +61,10 @@ namespace TrimDown.Objects {
                 return;
             }
 
-            title = get_string_property ("General", "title");
+            var t = get_string_property ("General", "title");
+            if (t != "") {
+                title = t;
+            }
             order = get_integer_property ("General", "order");
             name = get_string_property ("General", "name");
             bin = get_boolean_property ("General", "bin");

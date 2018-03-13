@@ -35,7 +35,7 @@ namespace TrimDown.Widgets {
 
         public Note (Objects.Note note) {
             this.note = note;
-            this.note.renamed.connect (
+            this.note.title_saved.connect (
                 (new_title) => {
                     label.label = new_title;
                     (this.parent as Gtk.ListBox).invalidate_sort ();

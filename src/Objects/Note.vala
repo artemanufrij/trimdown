@@ -26,12 +26,8 @@
  */
 
 namespace TrimDown.Objects {
-    public class Note : GLib.Object {
-        public signal void renamed (string title);
+    public class Note : BaseObject {
         public signal void removed ();
-
-        public string title { get; set; }
-
         public Chapter parent { get; private set; }
 
         string content_path;
@@ -42,10 +38,10 @@ namespace TrimDown.Objects {
 
             content_path = Path.build_filename (parent.notes_path, title);
 
-            load_properties ();
+            init ();
         }
 
-        private void load_properties () {
+        private void init () {
             if (!FileUtils.test (content_path, FileTest.EXISTS)) {
                 try {
                     FileUtils.set_contents (content_path, "");
@@ -54,6 +50,7 @@ namespace TrimDown.Objects {
                     return;
                 }
             }
+            load_properties ();
         }
 
         public string get_content () {
@@ -87,12 +84,8 @@ namespace TrimDown.Objects {
             title = new_title;
             content_path = new_path;
 
-            renamed (title);
+            title_saved (title);
             return true;
-        }
-
-        public void move_into_bin () {
-
         }
 
         public bool trash () {

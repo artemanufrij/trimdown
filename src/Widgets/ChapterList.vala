@@ -101,9 +101,9 @@ namespace TrimDown.Widgets {
             var item = new Widgets.Chapter (chapter);
             chapters.add (item);
             chapter.moved_into_bin.connect (
-                    () => {
-                        chapters.invalidate_filter ();
-                    });
+                () => {
+                    chapters.invalidate_filter ();
+                });
             item.activate ();
         }
 

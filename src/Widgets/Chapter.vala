@@ -40,8 +40,6 @@ namespace TrimDown.Widgets {
         }
 
         private void build_ui () {
-            var content = new Gtk.Grid ();
-            content.margin = 6;
             label = new Gtk.Label (chapter.name);
             label.expand = true;
             label.xalign = 0;
@@ -65,6 +63,9 @@ namespace TrimDown.Widgets {
                 });
             delete_event.add (delete_button);
 
+            var content = new Gtk.Grid ();
+            content.margin = 12;
+            content.margin_right = 6;
             content.attach (label, 0, 0);
             content.attach (delete_event, 1, 0);
 
