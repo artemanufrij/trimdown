@@ -25,30 +25,6 @@
  * Authored by: Artem Anufrij <artem.anufrij@live.de>
  */
 
-namespace TrimDown.Utils {
-    public static string get_new_project_property (string title, string kind) {
-        return """[General]
-title=""" + title + """
-[Metadata]
-kind=""" + kind + """
-""";
-    }
-
-    public static string get_new_chapter_property (string title, int order) {
-        return """[General]
-title=""" + title + """
-name=""" + title + """
-order=""" + order.to_string () + """
-bin=false
-""";
-    }
-
-    public static string get_new_scene_property (string title, int order) {
-        return """[General]
-title=""" + title + """
-name=""" + title + """
-order=""" + order.to_string () + """
-bin=false
-""";
-    }
+namespace TrimDown.Enums {
+    public enum ItemStyle { DEFAULT, BIN }
 }

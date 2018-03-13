@@ -80,6 +80,22 @@ namespace TrimDown.Objects {
             load_properties ();
         }
 
+        public bool has_bin_children () {
+            foreach (var note in notes) {
+                if (note.bin) {
+                    return true;
+                }
+            }
+
+            foreach (var scene in scenes) {
+                if (scene.bin) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private GLib.List<Scene> get_scene_collection () {
             GLib.List<Scene> return_value = new GLib.List<Scene> ();
 

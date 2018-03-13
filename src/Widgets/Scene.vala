@@ -32,10 +32,13 @@ namespace TrimDown.Widgets {
         public new string name { get { return scene.name; } }
         public int order { get { return scene.order; } }
 
+        Enums.ItemStyle item_style;
+
         Gtk.Label label;
 
-        public Scene (Objects.Scene scene) {
+        public Scene (Objects.Scene scene, Enums.ItemStyle item_style = Enums.ItemStyle.DEFAULT) {
             this.scene = scene;
+            this.item_style = item_style;
 
             build_ui ();
         }
@@ -45,40 +48,50 @@ namespace TrimDown.Widgets {
             label.expand = true;
             label.xalign = 0;
 
-            var delete_button = new Gtk.Image.from_icon_name ("user-trash-symbolic", Gtk.IconSize.BUTTON);
-            delete_button.halign = Gtk.Align.END;
-            delete_button.opacity = 0;
+            Gtk.Button action_button = null;
+            if (scene.bin) {
+                action_button = new Gtk.Button.from_icon_name ("edit-redo-symbolic");
+            } else {
+                action_button = new Gtk.Button.from_icon_name ("user-trash-symbolic");
+            }
+            action_button.get_style_context ().add_class ("flat");
+            action_button.can_focus = false;
+            action_button.halign = Gtk.Align.END;
+            action_button.opacity = 0;
 
-            var delete_event = new Gtk.EventBox ();
-            delete_event.button_press_event.connect (
+            action_button.clicked.connect (
+                () => {
+                    scene.move_into_bin ();
+                });
+            action_button.enter_notify_event.connect (
                 (event) => {
-                    if (event.button == 1) {
-                        scene.move_into_bin ();
-                    }
+                    action_button.opacity = 1;
                     return false;
                 });
-            delete_event.enter_notify_event.connect (
-                (event) => {
-                    delete_button.opacity = 1;
-                    return false;
-                });
-            delete_event.add (delete_button);
-
             var content = new Gtk.Grid ();
-            content.margin = 12;
-            content.margin_right = 6;
+
+            switch (item_style) {
+            case Enums.ItemStyle.BIN :
+                content.margin = 6;
+                break;
+            default :
+                content.margin = 12;
+                break;
+            }
+            content.margin_right = 0;
+
             content.attach (label, 0, 0);
-            content.attach (delete_event, 1, 0);
+            content.attach (action_button, 1, 0);
 
             var event_box = new Gtk.EventBox ();
             event_box.enter_notify_event.connect (
                 (event) => {
-                    delete_button.opacity = 0.5;
+                    action_button.opacity = 0.5;
                     return false;
                 });
             event_box.leave_notify_event.connect (
                 (event) => {
-                    delete_button.opacity = 0;
+                    action_button.opacity = 0;
                     return false;
                 });
             event_box.add (content);

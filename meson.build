@@ -42,11 +42,13 @@ executable(
     'src/Widgets/Notes.vala',
     'src/Widgets/Chapter.vala',
     'src/Widgets/ChapterList.vala',
+    'src/Widgets/Bin.vala',
     'src/Widgets/Views/Writer.vala',
     'src/Widgets/Views/Welcome.vala',
     'src/Dialogs/NewProject.vala',
     'src/Services/ProjectManager.vala',
     'src/Utils/Utils.vala',
+    'src/Utils/Enums.vala',
 
  #   asresources,
     c_args: c_args,

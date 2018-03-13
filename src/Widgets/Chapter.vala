@@ -12,7 +12,7 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
  * The Noise authors hereby grant permission for non-GPL compatible
  * GStreamer plugins to be used and distributed together with GStreamer
@@ -44,40 +44,37 @@ namespace TrimDown.Widgets {
             label.expand = true;
             label.xalign = 0;
 
-            var delete_button = new Gtk.Image.from_icon_name ("user-trash-symbolic", Gtk.IconSize.BUTTON);
-            delete_button.halign = Gtk.Align.END;
-            delete_button.opacity = 0;
+            var action_button = new Gtk.Button.from_icon_name ("user-trash-symbolic");
+            action_button.get_style_context ().add_class ("flat");
+            action_button.can_focus = false;
+            action_button.halign = Gtk.Align.END;
+            action_button.opacity = 0;
 
-            var delete_event = new Gtk.EventBox ();
-            delete_event.button_press_event.connect (
+            action_button.clicked.connect (
+                () => {
+                    chapter.move_into_bin ();
+                });
+            action_button.enter_notify_event.connect (
                 (event) => {
-                    if (event.button == 1) {
-                        chapter.move_into_bin ();
-                    }
+                    action_button.opacity = 1;
                     return false;
                 });
-            delete_event.enter_notify_event.connect (
-                (event) => {
-                    delete_button.opacity = 1;
-                    return false;
-                });
-            delete_event.add (delete_button);
 
             var content = new Gtk.Grid ();
             content.margin = 12;
-            content.margin_right = 6;
+            content.margin_right = 0;
             content.attach (label, 0, 0);
-            content.attach (delete_event, 1, 0);
+            content.attach (action_button, 1, 0);
 
             var event_box = new Gtk.EventBox ();
             event_box.enter_notify_event.connect (
                 (event) => {
-                    delete_button.opacity = 0.5;
+                    action_button.opacity = 0.5;
                     return false;
                 });
             event_box.leave_notify_event.connect (
                 (event) => {
-                    delete_button.opacity = 0;
+                    action_button.opacity = 0;
                     return false;
                 });
             event_box.add (content);

@@ -50,6 +50,7 @@ namespace TrimDown.Widgets {
         private void build_ui () {
             label = new Gtk.Label (note.title);
             label.margin = 6;
+            label.xalign = 0;
 
             this.add (label);
             this.show_all ();

@@ -38,7 +38,7 @@ namespace TrimDown.Objects {
         public bool bin { get; protected set; default = false; }
 
         protected string properties_path;
-        protected KeyFile properties;
+        protected KeyFile? properties;
 
         construct {
             properties = new KeyFile ();
@@ -47,7 +47,14 @@ namespace TrimDown.Objects {
         protected void load_properties () {
             if (!FileUtils.test (properties_path, FileTest.EXISTS)) {
                 try {
-                    FileUtils.set_contents (properties_path, Utils.get_new_chapter_property (name, order));
+                    if (this is Chapter) {
+                        FileUtils.set_contents (properties_path, Utils.get_new_chapter_property (name, order));
+                    } else if (this is Scene) {
+                        FileUtils.set_contents (properties_path, Utils.get_new_scene_property (name, order));
+                    } else {
+                        properties = null;
+                        return;
+                    }
                 } catch (Error err) {
                     warning (err.message);
                     return;
@@ -78,6 +85,9 @@ namespace TrimDown.Objects {
         }
 
         protected string get_string_property (string group, string key) {
+            if (properties == null) {
+                return "";
+            }
             try {
                 return properties.get_string (group, key);
             } catch (Error err) {
@@ -87,6 +97,9 @@ namespace TrimDown.Objects {
         }
 
         protected int get_integer_property (string group, string key) {
+            if (properties == null) {
+                return 0;
+            }
             try {
                 return properties.get_integer (group, key);
             } catch (Error err) {
@@ -96,6 +109,9 @@ namespace TrimDown.Objects {
         }
 
         protected bool get_boolean_property (string group, string key) {
+            if (properties == null) {
+                return false;
+            }
             try {
                 return properties.get_boolean (group, key);
             } catch (Error err) {
@@ -105,11 +121,17 @@ namespace TrimDown.Objects {
         }
 
         protected bool set_string_property (string group, string key, string val) {
+            if (properties == null) {
+                return false;
+            }
             properties.set_string (group, key, val);
             return save_property_file ();
         }
 
         protected bool set_boolean_property (string group, string key, bool val) {
+            if (properties == null) {
+                return false;
+            }
             properties.set_boolean (group, key, val);
             return save_property_file ();
         }

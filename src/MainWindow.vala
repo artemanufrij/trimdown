@@ -70,12 +70,12 @@ namespace TrimDown {
             this.set_titlebar (headerbar);
 
             new_proj = new Gtk.Button.from_icon_name ("document-new", Gtk.IconSize.LARGE_TOOLBAR);
-            new_proj.tooltip_text = _("New Project");
+            new_proj.tooltip_text = _ ("New Project");
             new_proj.clicked.connect (create_project_action);
             headerbar.pack_start (new_proj);
 
             open_proj = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR);
-            open_proj.tooltip_text = _("Open Project");
+            open_proj.tooltip_text = _ ("Open Project");
             open_proj.clicked.connect (open_project_action);
             headerbar.pack_start (open_proj);
 
@@ -100,7 +100,7 @@ namespace TrimDown {
             var notes = new Widgets.Notes ();
 
             notes_button = new Gtk.Button.from_icon_name ("format-text-highlight", Gtk.IconSize.LARGE_TOOLBAR);
-            notes_button.tooltip_text = _("Chapter Notes");
+            notes_button.tooltip_text = _ ("Chapter Notes");
             var notes_popup = new Gtk.Popover (notes_button);
             notes_popup.closed.connect (
                 () => {
@@ -116,8 +116,21 @@ namespace TrimDown {
                 });
             headerbar.pack_end (notes_button);
 
+            // BIN
+            var bin = new Widgets.Bin ();
+
             bin_items = new Gtk.Button.from_icon_name ("user-trash", Gtk.IconSize.LARGE_TOOLBAR);
-            bin_items.tooltip_text = _("Deleted Items");
+            bin_items.tooltip_text = _ ("Deleted Items");
+            var bin_popup = new Gtk.Popover (bin_items);
+            bin_popup.add (bin);
+            bin_items.clicked.connect (
+                () => {
+                    if (writer.current_project != null) {
+                        bin.show_content (writer.current_project);
+                    }
+                    bin_popup.show_all ();
+                });
+
             headerbar.pack_end (bin_items);
 
             content = new Gtk.Stack ();
@@ -141,7 +154,7 @@ namespace TrimDown {
         private void open_project_action () {
             var project = project_manager.open_project ();
             if (project != null) {
-                open_project (project);
+                    open_project (project);
             }
         }
 
