@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=TrimDown
+GenericName=TrimDown
+Comment=An app for Novels and script Writer
+Keywords=graph;visual;draw;
+Exec=com.github.artemanufrij.trimdown %U
+Icon=com.github.artemanufrij.trimdown
+Terminal=false
+Type=Application
+Categories=Development;GNOME;GTK;
+X-GNOME-Gettext-Domain=com.github.artemanufrij.trimdown

@@ -59,5 +59,5 @@ executable(
 meson.add_install_script('meson/post_install.py')
 
 subdir('schemas')
-#subdir('data')
+subdir('data')
 #subdir('po')
