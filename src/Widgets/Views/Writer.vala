@@ -36,8 +36,8 @@ namespace TrimDown.Widgets.Views {
         Gtk.Entry title;
         Gtk.SourceView body;
 
-        public Writer () {
-            TrimDownApp.instance.mainwindow.delete_event.connect (
+        public Writer (MainWindow mainwindow) {
+            mainwindow.delete_event.connect (
                 () => {
                     if (current_scene != null) {
                         current_scene.save_content (body.buffer.text.strip ());

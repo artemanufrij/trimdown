@@ -77,6 +77,7 @@ namespace TrimDown.Objects {
 
             title = get_string_property ("General", "title");
             order = get_integer_property ("General", "order");
+            bin = get_boolean_property ("General", "bin");
         }
 
         public string get_content () {

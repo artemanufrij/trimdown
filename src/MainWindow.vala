@@ -126,7 +126,7 @@ namespace TrimDown {
             welcome.new_project_clicked.connect (create_project_action);
             welcome.open_project_clicked.connect (open_project_action);
 
-            writer = new Widgets.Views.Writer ();
+            writer = new Widgets.Views.Writer (this);
 
             content.add_named (welcome, "welcome");
             content.add_named (writer, "writer");

@@ -41,6 +41,7 @@ namespace TrimDown.Widgets {
             this.width_request = 200;
             chapters = new Gtk.ListBox ();
             chapters.set_sort_func (chapters_sort_func);
+            chapters.set_filter_func (chapters_filter_func);
             chapters.selected_rows_changed.connect (
                 () => {
                     if (chapters.get_selected_row () is Widgets.Chapter) {
@@ -82,6 +83,10 @@ namespace TrimDown.Widgets {
             current_project = project;
             foreach (var chapter in project.chapters) {
                 var item = new Widgets.Chapter (chapter);
+                chapter.moved_into_bin.connect (
+                    () => {
+                        chapters.invalidate_filter ();
+                    });
                 chapters.add (item);
             }
 
@@ -95,6 +100,10 @@ namespace TrimDown.Widgets {
         public void add_chapter (Objects.Chapter chapter) {
             var item = new Widgets.Chapter (chapter);
             chapters.add (item);
+            chapter.moved_into_bin.connect (
+                    () => {
+                        chapters.invalidate_filter ();
+                    });
             item.activate ();
         }
 
@@ -114,6 +123,11 @@ namespace TrimDown.Widgets {
                 return item1.title.collate (item2.title);
             }
             return 0;
+        }
+
+        private bool chapters_filter_func (Gtk.ListBoxRow child) {
+            var item = (Widgets.Chapter)child;
+            return !item.chapter.bin;
         }
     }
 }

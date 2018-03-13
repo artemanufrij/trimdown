@@ -91,6 +91,10 @@ namespace TrimDown.Objects {
             return true;
         }
 
+        public void move_into_bin () {
+
+        }
+
         public bool trash () {
             File file = File.new_for_path (content_path);
             try {

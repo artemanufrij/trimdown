@@ -29,6 +29,7 @@ namespace TrimDown.Utils {
     public static string get_new_project_property (string title, string kind) {
         return """[General]
 title=""" + title + """
+[Metadata]
 kind=""" + kind + """
 """;
     }

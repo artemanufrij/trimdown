@@ -96,6 +96,7 @@ namespace TrimDown.Objects {
             title = get_string_property ("General", "title");
             order = get_integer_property ("General", "order");
             name = get_string_property ("General", "name");
+            bin = get_boolean_property ("General", "bin");
         }
 
         private GLib.List<Scene> get_scene_collection () {

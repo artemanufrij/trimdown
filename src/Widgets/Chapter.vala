@@ -43,10 +43,45 @@ namespace TrimDown.Widgets {
             var content = new Gtk.Grid ();
             content.margin = 6;
             label = new Gtk.Label (chapter.name);
+            label.expand = true;
+            label.xalign = 0;
+
+            var delete_button = new Gtk.Image.from_icon_name ("user-trash-symbolic", Gtk.IconSize.BUTTON);
+            delete_button.halign = Gtk.Align.END;
+            delete_button.opacity = 0;
+
+            var delete_event = new Gtk.EventBox ();
+            delete_event.button_release_event.connect (
+                (event) => {
+                    if (event.button == 1) {
+                        chapter.move_into_bin ();
+                    }
+                    return false;
+                });
+            delete_event.enter_notify_event.connect (
+                (event) => {
+                    delete_button.opacity = 1;
+                    return false;
+                });
+            delete_event.add (delete_button);
 
             content.attach (label, 0, 0);
+            content.attach (delete_event, 1, 0);
 
-            this.add (content);
+            var event_box = new Gtk.EventBox ();
+            event_box.enter_notify_event.connect (
+                (event) => {
+                    delete_button.opacity = 1;
+                    return false;
+                });
+            event_box.leave_notify_event.connect (
+                (event) => {
+                    delete_button.opacity = 0;
+                    return false;
+                });
+            event_box.add (content);
+
+            this.add (event_box);
             this.show_all ();
         }
     }

@@ -29,17 +29,26 @@ namespace TrimDown.Objects {
     public class BaseObject : GLib.Object {
         public signal void content_saved ();
         public signal void title_saved (string title);
+        public signal void moved_into_bin ();
 
         public string path { get; protected set; }
         public string title { get; protected set; }
         public string name { get; protected set; }
         public int order { get; protected set; }
+        public bool bin { get; protected set; default = false; }
 
         protected string properties_path;
         protected KeyFile properties;
 
         construct {
             properties = new KeyFile ();
+        }
+
+        public void move_into_bin () {
+            if (set_boolean_property ("General", "bin", true)) {
+                bin = true;
+                moved_into_bin ();
+            }
         }
 
         protected string get_string_property (string group, string key) {
@@ -60,8 +69,26 @@ namespace TrimDown.Objects {
             return 0;
         }
 
+        protected bool get_boolean_property (string group, string key) {
+            try {
+                return properties.get_boolean (group, key);
+            } catch (Error err) {
+                warning (err.message);
+            }
+            return false;
+        }
+
         protected bool set_string_property (string group, string key, string val) {
             properties.set_string (group, key, val);
+            return save_property_file ();
+        }
+
+        protected bool set_boolean_property (string group, string key, bool val) {
+            properties.set_boolean (group, key, val);
+            return save_property_file ();
+        }
+
+        private bool save_property_file () {
             try {
                 properties.save_to_file (properties_path);
             } catch (Error err) {
@@ -73,7 +100,7 @@ namespace TrimDown.Objects {
 
         public void set_new_title (string new_title) {
             if (set_string_property ("General", "title", new_title)) {
-               title = new_title;
+                title = new_title;
             }
             title_saved (title);
         }
