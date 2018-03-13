@@ -154,7 +154,7 @@ namespace TrimDown.Objects {
             do {
                 new_note_name = _ ("Note %d").printf (i);
                 i++;
-            } while (FileUtils.test (Path.build_filename (scenes_path, new_note_name), FileTest.EXISTS));
+            } while (FileUtils.test (Path.build_filename (notes_path, new_note_name), FileTest.EXISTS));
 
             var new_note = create_new_note (new_note_name);
             _notes.append (new_note);
