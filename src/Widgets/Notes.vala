@@ -63,9 +63,7 @@ namespace TrimDown.Widgets {
             title.get_style_context ().add_class ("h3");
             title.focus_out_event.connect (
                 () => {
-                    if (!save_title () && current_note != null) {
-                        title.text = current_note.title;
-                    }
+                    save_title ();
                     return false;
                 });
 
@@ -86,14 +84,6 @@ namespace TrimDown.Widgets {
                 });
             action_toolbar.pack_start (add_button);
 
-            var trash_button = new Gtk.Button.from_icon_name ("user-trash-symbolic");
-            trash_button.tooltip_text = _ ("Remove Note");
-            trash_button.clicked.connect (
-                () => {
-                    trash_note ();
-                });
-            action_toolbar.pack_end (trash_button);
-
             this.attach (scroll, 0, 0);
             this.attach (action_toolbar, 0, 1);
             this.attach (new Gtk.Separator (Gtk.Orientation.VERTICAL), 1, 0, 1, 2);
@@ -111,26 +101,22 @@ namespace TrimDown.Widgets {
                 current_chapter.note_created.disconnect (add_note);
             }
 
-            current_chapter = chapter;
-
             reset ();
             foreach (var note in chapter.notes) {
                 var item = new Widgets.Note (note);
-                note.bin_location_changed.connect (
-                    () => {
-                        notes.invalidate_filter ();
-                    });
+                note.bin_location_changed.connect (refilter_note);
                 notes.add (item);
             }
+            refilter_note ();
 
-            if (notes.get_children ().length () > 0) {
-                notes.get_children ().first ().data.activate ();
-            }
+            current_chapter = chapter;
 
             current_chapter.note_created.connect (add_note);
         }
 
         public void reset () {
+            current_chapter = null;
+            current_note = null;
             foreach (var child in notes.get_children ()) {
                 child.destroy ();
             }
@@ -139,10 +125,7 @@ namespace TrimDown.Widgets {
         private void add_note (Objects.Note note) {
             var item = new Widgets.Note (note);
             notes.add (item);
-            note.bin_location_changed.connect (
-                () => {
-                    notes.invalidate_filter ();
-                });
+            note.bin_location_changed.connect (refilter_note);
             item.activate ();
             title.grab_focus ();
         }
@@ -152,9 +135,14 @@ namespace TrimDown.Widgets {
                 return;
             }
 
+            if (current_note != null) {
+                current_note.title_saved.disconnect (set_new_title);
+            }
+
             current_note = note;
             title.text = note.title;
             text.buffer.text = note.get_content ();
+            current_note.title_saved.connect (set_new_title);
         }
 
         public void save_note () {
@@ -164,27 +152,25 @@ namespace TrimDown.Widgets {
             }
         }
 
-        private bool save_title () {
+        private void save_title () {
             if (current_note != null) {
                 var note_title = title.text.strip ();
                 if (current_note.title != note_title) {
-                    return current_note.rename (note_title);
+                    current_note.set_new_title (note_title);
                 }
             }
-            return false;
         }
 
-        private void trash_note () {
-            var for_trash = current_note;
+        private void refilter_note () {
+            save_note ();
+            notes.invalidate_filter ();
             current_note = null;
-            if (for_trash.trash ()) {
-                if (notes.get_children ().length () > 0) {
-                    notes.get_children ().first ().data.activate ();
-                } else {
-                    text.buffer.text = "";
-                    title.text = "";
-                }
-            }
+            title.text = "";
+            text.buffer.text = "";
+        }
+
+        private void set_new_title (string new_title) {
+            title.text = new_title;
         }
 
         private bool notes_filter_func (Gtk.ListBoxRow child) {

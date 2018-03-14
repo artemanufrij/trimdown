@@ -35,9 +35,20 @@ namespace TrimDown.Widgets {
         Enums.ItemStyle item_style;
 
         Gtk.Label label;
+        Gtk.Button action_button;
+        Gtk.Image redo_img;
+        Gtk.Image trash_img;
 
         public Scene (Objects.Scene scene, Enums.ItemStyle item_style = Enums.ItemStyle.DEFAULT) {
             this.scene = scene;
+            this.scene.bin_location_changed.connect (
+                () => {
+                    if (scene.bin) {
+                        action_button.set_image (redo_img);
+                    } else {
+                        action_button.set_image (trash_img);
+                    }
+                });
             this.item_style = item_style;
 
             build_ui ();
@@ -51,12 +62,16 @@ namespace TrimDown.Widgets {
             var event_box = new Gtk.EventBox ();
             var content = new Gtk.Grid ();
 
+            redo_img = new Gtk.Image.from_icon_name ("edit-redo-symbolic", Gtk.IconSize.BUTTON);
+            trash_img = new Gtk.Image.from_icon_name ("user-trash-symbolic", Gtk.IconSize.BUTTON);
+
+            action_button = new Gtk.Button ();
+
             if (!scene.parent.bin) {
-                Gtk.Button action_button = null;
                 if (scene.bin) {
-                    action_button = new Gtk.Button.from_icon_name ("edit-redo-symbolic");
+                    action_button.set_image (redo_img);
                 } else {
-                    action_button = new Gtk.Button.from_icon_name ("user-trash-symbolic");
+                    action_button.set_image (trash_img);
                 }
                 action_button.get_style_context ().add_class ("flat");
                 action_button.can_focus = false;
@@ -99,10 +114,9 @@ namespace TrimDown.Widgets {
                 content.margin = 12;
                 break;
             }
+
             content.margin_right = 0;
-
             content.attach (label, 0, 0);
-
             event_box.add (content);
 
             this.add (event_box);

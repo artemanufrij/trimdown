@@ -125,12 +125,8 @@ namespace TrimDown.Objects {
                 FileInfo file_info = null;
 
                 while ((file_info = children.next_file ()) != null) {
-                    if (file_info.get_content_type () == "text/plain") {
+                    if (file_info.get_content_type () == "text/plain" && !file_info.get_name ().has_suffix ("properties")) {
                         var note = new Note (this, file_info.get_name ());
-                        note.removed.connect (
-                            () => {
-                                _notes.remove (note);
-                            });
                         return_value.append (note);
                     }
                 }
@@ -174,10 +170,6 @@ namespace TrimDown.Objects {
 
             var new_note = create_new_note (new_note_name);
             _notes.append (new_note);
-            new_note.removed.connect (
-                () => {
-                    _notes.remove (new_note);
-                });
             note_created (new_note);
             return new_note;
         }

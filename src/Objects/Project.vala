@@ -49,15 +49,15 @@ namespace TrimDown.Objects {
             this.title = Path.get_basename (path);
 
             chapters_path = Path.build_filename (path, _("Chapters"));
+            properties_path = Path.build_filename (path, title + ".td");
 
             init ();
         }
 
         private void init () {
-            var prop = Path.build_filename (path, title + ".td");
-            if (!FileUtils.test (prop, FileTest.EXISTS)) {
+            if (!FileUtils.test (properties_path, FileTest.EXISTS)) {
                 try {
-                    FileUtils.set_contents (prop, Utils.get_new_project_property (title, kind));
+                    FileUtils.set_contents (properties_path, Utils.get_new_project_property (title, kind));
                 } catch (Error err) {
                     warning (err.message);
                     return;
@@ -66,7 +66,7 @@ namespace TrimDown.Objects {
 
             load_properties ();
 
-            kind = get_string_property ("General", "kind");
+            kind = get_string_property ("Metadata", "kind");
         }
 
         private GLib.List<Chapter> get_chapter_collection () {

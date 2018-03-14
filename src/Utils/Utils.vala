@@ -51,4 +51,13 @@ order=""" + order.to_string () + """
 bin=false
 """;
     }
+
+    public static string get_new_note_property (string title, int order) {
+        return """[General]
+title=""" + title + """
+name=""" + title + """
+order=""" + order.to_string () + """
+bin=false
+""";
+    }
 }

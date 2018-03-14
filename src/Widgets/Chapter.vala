@@ -32,10 +32,24 @@ namespace TrimDown.Widgets {
         public string title { get { return chapter.title; } }
         public int order { get { return chapter.order; } }
 
-        Gtk.Label label;
+        Enums.ItemStyle item_style;
 
-        public Chapter (Objects.Chapter chapter) {
+        Gtk.Label label;
+        Gtk.Button action_button;
+        Gtk.Image redo_img;
+        Gtk.Image trash_img;
+
+        public Chapter (Objects.Chapter chapter, Enums.ItemStyle item_style = Enums.ItemStyle.DEFAULT) {
             this.chapter = chapter;
+            this.chapter.bin_location_changed.connect (
+                () => {
+                    if (chapter.bin) {
+                        action_button.set_image (redo_img);
+                    } else {
+                        action_button.set_image (trash_img);
+                    }
+                });
+            this.item_style = item_style;
             build_ui ();
         }
 
@@ -44,7 +58,21 @@ namespace TrimDown.Widgets {
             label.expand = true;
             label.xalign = 0;
 
-            var action_button = new Gtk.Button.from_icon_name ("user-trash-symbolic");
+            var event_box = new Gtk.EventBox ();
+            var content = new Gtk.Grid ();
+            content.margin = 12;
+
+            redo_img = new Gtk.Image.from_icon_name ("edit-redo-symbolic", Gtk.IconSize.BUTTON);
+            trash_img = new Gtk.Image.from_icon_name ("user-trash-symbolic", Gtk.IconSize.BUTTON);
+
+            action_button = new Gtk.Button ();
+
+            if (chapter.bin) {
+                action_button.set_image (redo_img);
+            } else {
+                action_button.set_image (trash_img);
+            }
+
             action_button.get_style_context ().add_class ("flat");
             action_button.can_focus = false;
             action_button.halign = Gtk.Align.END;
@@ -52,7 +80,11 @@ namespace TrimDown.Widgets {
 
             action_button.clicked.connect (
                 () => {
-                    chapter.move_into_bin ();
+                    if (chapter.bin) {
+                        chapter.restore_from_bin ();
+                    } else {
+                        chapter.move_into_bin ();
+                    }
                 });
             action_button.enter_notify_event.connect (
                 (event) => {
@@ -60,13 +92,6 @@ namespace TrimDown.Widgets {
                     return false;
                 });
 
-            var content = new Gtk.Grid ();
-            content.margin = 12;
-            content.margin_right = 0;
-            content.attach (label, 0, 0);
-            content.attach (action_button, 1, 0);
-
-            var event_box = new Gtk.EventBox ();
             event_box.enter_notify_event.connect (
                 (event) => {
                     action_button.opacity = 0.5;
@@ -77,6 +102,12 @@ namespace TrimDown.Widgets {
                     action_button.opacity = 0;
                     return false;
                 });
+            content.attach (action_button, 1, 0);
+
+
+            content.margin_right = 0;
+            content.attach (label, 0, 0);
+
             event_box.add (content);
 
             this.add (event_box);

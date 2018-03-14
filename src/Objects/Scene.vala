@@ -50,15 +50,6 @@ namespace TrimDown.Objects {
                 DirUtils.create_with_parents (path, 0755);
             }
 
-            if (!FileUtils.test (properties_path, FileTest.EXISTS)) {
-                try {
-                    FileUtils.set_contents (properties_path, Utils.get_new_scene_property (name, order));
-                } catch (Error err) {
-                    warning (err.message);
-                    return;
-                }
-            }
-
             if (!FileUtils.test (content_path, FileTest.EXISTS)) {
                 try {
                     FileUtils.set_contents (content_path, "");

@@ -82,7 +82,7 @@ namespace TrimDown.Widgets {
 
             current_project = project;
             foreach (var chapter in project.chapters) {
-                var item = new Widgets.Chapter (chapter);
+                var item = new Chapter (chapter);
                 chapter.bin_location_changed.connect (
                     () => {
                         chapters.invalidate_filter ();
@@ -90,15 +90,17 @@ namespace TrimDown.Widgets {
                 chapters.add (item);
             }
 
-            if (chapters.get_children ().length () > 0) {
-                chapters.get_children ().first ().data.activate ();
+            foreach (var item in chapters.get_children ()) {
+                if (!(item as Chapter).chapter.bin) {
+                    item.activate ();
+                    break;
+                }
             }
-
             current_project.chapter_created.connect (add_chapter);
         }
 
         public void add_chapter (Objects.Chapter chapter) {
-            var item = new Widgets.Chapter (chapter);
+            var item = new Chapter (chapter);
             chapters.add (item);
             chapter.bin_location_changed.connect (
                 () => {
@@ -114,7 +116,7 @@ namespace TrimDown.Widgets {
         }
 
         private bool chapters_filter_func (Gtk.ListBoxRow child) {
-            var item = (Widgets.Chapter)child;
+            var item = (Chapter)child;
             return !item.chapter.bin;
         }
     }

@@ -172,15 +172,20 @@ namespace TrimDown.Widgets {
         private void refilter_bin_scenes_content () {
             scenes.invalidate_filter ();
             chapters.invalidate_filter ();
+            text.buffer.text = "";
         }
 
         private void refilter_bin_notes_content () {
             notes.invalidate_filter ();
             chapters.invalidate_filter ();
+            text.buffer.text = "";
         }
 
         private void refilter_bin_chapters_content () {
             chapters.invalidate_filter ();
+            notes.invalidate_filter ();
+            scenes.invalidate_filter ();
+            text.buffer.text = "";
         }
 
         private bool scenes_filter_func (Gtk.ListBoxRow child) {

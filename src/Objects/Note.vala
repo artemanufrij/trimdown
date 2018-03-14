@@ -27,7 +27,6 @@
 
 namespace TrimDown.Objects {
     public class Note : BaseObject {
-        public signal void removed ();
         public Chapter parent { get; private set; }
 
         string content_path;
@@ -35,8 +34,10 @@ namespace TrimDown.Objects {
         public Note (Chapter chapter, string title) {
             this.parent = chapter;
             this.title = title;
+            this.name = title;
 
             content_path = Path.build_filename (parent.notes_path, title);
+            properties_path = content_path + ".properties";
 
             init ();
         }
@@ -70,35 +71,6 @@ namespace TrimDown.Objects {
                     warning (err.message);
                 return false;
             }
-            return true;
-        }
-
-        public bool rename (string new_title) {
-            var new_path = Path.build_filename (parent.notes_path, new_title);
-
-            if (FileUtils.test (new_path, FileTest.EXISTS)) {
-                return false;
-            }
-
-            FileUtils.rename (content_path, new_path);
-            title = new_title;
-            content_path = new_path;
-
-            title_saved (title);
-            return true;
-        }
-
-        public bool trash () {
-            File file = File.new_for_path (content_path);
-            try {
-                if (file.trash ()) {
-                    removed ();
-                }
-            } catch (Error err) {
-                warning (err.message);
-                return false;
-            }
-
             return true;
         }
     }

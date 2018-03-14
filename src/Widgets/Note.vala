@@ -32,6 +32,9 @@ namespace TrimDown.Widgets {
         public string title { get { return note.title; } }
 
         Gtk.Label label;
+        Gtk.Button action_button;
+        Gtk.Image redo_img;
+        Gtk.Image trash_img;
 
         public Note (Objects.Note note) {
             this.note = note;
@@ -40,19 +43,74 @@ namespace TrimDown.Widgets {
                     label.label = new_title;
                     (this.parent as Gtk.ListBox).invalidate_sort ();
                 });
-            this.note.removed.connect (
-                ()=> {
-                    this.dispose ();
+            this.note.bin_location_changed.connect (
+                () => {
+                    if (note.bin) {
+                        action_button.set_image (redo_img);
+                    } else {
+                        action_button.set_image (trash_img);
+                    }
                 });
             build_ui ();
         }
 
         private void build_ui () {
             label = new Gtk.Label (note.title);
-            label.margin = 6;
             label.xalign = 0;
+            label.expand = true;
 
-            this.add (label);
+            var event_box = new Gtk.EventBox ();
+            var content = new Gtk.Grid ();
+            content.margin = 6;
+
+            redo_img = new Gtk.Image.from_icon_name ("edit-redo-symbolic", Gtk.IconSize.BUTTON);
+            trash_img = new Gtk.Image.from_icon_name ("user-trash-symbolic", Gtk.IconSize.BUTTON);
+
+            action_button = new Gtk.Button ();
+
+            if (!note.parent.bin) {
+                if (note.bin) {
+                    action_button.set_image (redo_img);
+                } else {
+                    action_button.set_image (trash_img);
+                }
+                action_button.get_style_context ().add_class ("flat");
+                action_button.can_focus = false;
+                action_button.halign = Gtk.Align.END;
+                action_button.opacity = 0;
+
+                action_button.clicked.connect (
+                    () => {
+                        if (note.bin) {
+                            note.restore_from_bin ();
+                        } else {
+                            note.move_into_bin ();
+                        }
+                    });
+                action_button.enter_notify_event.connect (
+                    (event) => {
+                        action_button.opacity = 1;
+                        return false;
+                    });
+
+                event_box.enter_notify_event.connect (
+                    (event) => {
+                        action_button.opacity = 0.5;
+                        return false;
+                    });
+                event_box.leave_notify_event.connect (
+                    (event) => {
+                        action_button.opacity = 0;
+                        return false;
+                    });
+                content.attach (action_button, 1, 0);
+            }
+
+            content.margin_right = 0;
+            content.attach (label, 0, 0);
+            event_box.add (content);
+
+            this.add (event_box);
             this.show_all ();
         }
     }

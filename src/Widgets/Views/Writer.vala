@@ -113,9 +113,15 @@ namespace TrimDown.Widgets.Views {
             if (current_chapter == chapter) {
                 return;
             }
+
+            if (current_chapter != null) {
+                current_chapter.bin_location_changed.disconnect (clear);
+            }
+
             current_chapter = chapter;
             scenes.show_scenes (chapter);
             title.text = chapter.title;
+            current_chapter.bin_location_changed.connect (clear);
         }
 
         private void show_scene (Objects.Scene scene) {
@@ -129,6 +135,12 @@ namespace TrimDown.Widgets.Views {
         private void chapter_created (Objects.Chapter chapter) {
             title.grab_focus ();
             title.select_region (0, chapter.title.length);
+        }
+
+        private void clear () {
+            title.text = "";
+            body.buffer.text = "";
+            scenes.reset ();
         }
     }
 }
