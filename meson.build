@@ -49,6 +49,7 @@ executable(
     'src/Services/ProjectManager.vala',
     'src/Utils/Utils.vala',
     'src/Utils/Enums.vala',
+    'src/Utils/Lists.vala',
 
  #   asresources,
     c_args: c_args,

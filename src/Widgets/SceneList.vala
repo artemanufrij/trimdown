@@ -44,7 +44,7 @@ namespace TrimDown.Widgets {
             this.margin_left = 0;
 
             scenes = new Gtk.ListBox ();
-            scenes.set_sort_func (scenes_sort_func);
+            scenes.set_sort_func (Utils.scenes_sort_func);
             scenes.set_filter_func (scenes_filter_func);
             scenes.selected_rows_changed.connect (
                 () => {
@@ -94,7 +94,7 @@ namespace TrimDown.Widgets {
             current_chapter = chapter;
             foreach (var scene in chapter.scenes) {
                 var item = new Widgets.Scene (scene);
-                scene.moved_into_bin.connect (
+                scene.bin_location_changed.connect (
                 () => {
                     scenes.invalidate_filter ();
                 });
@@ -117,23 +117,11 @@ namespace TrimDown.Widgets {
         public void add_scene (Objects.Scene scene) {
             var item = new Widgets.Scene (scene);
             scenes.add (item);
-            scene.moved_into_bin.connect (
+            scene.bin_location_changed.connect (
                 () => {
                     scenes.invalidate_filter ();
                 });
             item.activate ();
-        }
-
-        private int scenes_sort_func (Gtk.ListBoxRow child1, Gtk.ListBoxRow child2) {
-            var item1 = (Widgets.Scene)child1;
-            var item2 = (Widgets.Scene)child2;
-            if (item1 != null && item2 != null) {
-                if (item1.order != item2.order) {
-                    return item1.order - item2.order;
-                }
-                return item1.name.collate (item2.name);
-            }
-            return 0;
         }
 
         private bool scenes_filter_func (Gtk.ListBoxRow child) {

@@ -59,8 +59,7 @@ namespace TrimDown.Widgets {
             this.attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 2, 1);
             this.attach (note, 2, 2);
             this.attach (new Gtk.Separator (Gtk.Orientation.VERTICAL), 3, 0, 1, 3);
-            this.attach (scroll, 4, 0, 2, 3);
-
+            this.attach (scroll, 4, 0, 3, 3);
 
             this.show_all ();
         }
@@ -71,24 +70,24 @@ namespace TrimDown.Widgets {
             scroll.expand = true;
 
             chapters = new Gtk.ListBox ();
+            chapters.set_filter_func (chapters_filter_func);
+            chapters.set_sort_func (Utils.chapters_sort_func);
             scroll.add (chapters);
             chapters.selected_rows_changed.connect (
                 () => {
-                    reset ();
+                    reset_children ();
                     if (chapters.get_selected_row () is Chapter) {
                         var chapter = (chapters.get_selected_row () as Chapter).chapter;
                         foreach (var note in chapter.notes) {
-                            if (chapter.bin || note.bin) {
-                                var item = new Note (note);
-                                notes.add (item);
-                            }
+                            var item = new Note (note);
+                            note.bin_location_changed.connect (refilter_bin_notes_content);
+                            notes.add (item);
                         }
 
                         foreach (var scene in chapter.scenes) {
-                            if (chapter.bin || scene.bin) {
-                                var item = new Scene (scene, Enums.ItemStyle.BIN);
-                                scenes.add (item);
-                            }
+                            var item = new Scene (scene, Enums.ItemStyle.BIN);
+                            scene.bin_location_changed.connect (refilter_bin_scenes_content);
+                            scenes.add (item);
                         }
                     }
                 });
@@ -103,6 +102,8 @@ namespace TrimDown.Widgets {
             scroll.expand = true;
 
             scenes = new Gtk.ListBox ();
+            scenes.set_filter_func (scenes_filter_func);
+            scenes.set_sort_func (Utils.scenes_sort_func);
             scenes.selected_rows_changed.connect (
                 () => {
                     if (scenes.get_selected_row () is Scene) {
@@ -123,6 +124,8 @@ namespace TrimDown.Widgets {
             scroll.expand = true;
 
             notes = new Gtk.ListBox ();
+            notes.set_filter_func (notes_filter_func);
+            notes.set_sort_func (Utils.notes_sort_func);
             notes.selected_rows_changed.connect (
                 () => {
                     if (notes.get_selected_row () is Note) {
@@ -138,22 +141,61 @@ namespace TrimDown.Widgets {
         }
 
         public void show_content (Objects.Project project) {
+            reset ();
+
             foreach (var chapter in project.chapters) {
-                if (chapter.bin || chapter.has_bin_children ()) {
-                    var item = new Chapter (chapter);
-                    chapters.add (item);
-                }
+                var item = new Chapter (chapter);
+                chapter.bin_location_changed.connect (refilter_bin_chapters_content);
+                chapters.add (item);
             }
         }
 
         public void reset () {
+            foreach (var child in chapters.get_children ()) {
+                (child as Chapter).chapter.bin_location_changed.disconnect (refilter_bin_chapters_content);
+                child.destroy ();
+            }
+        }
+
+        public void reset_children () {
             foreach (var child in scenes.get_children ()) {
+                (child as Scene).scene.bin_location_changed.disconnect (refilter_bin_scenes_content);
                 child.destroy ();
             }
             foreach (var child in notes.get_children ()) {
+                (child as Note).note.bin_location_changed.disconnect (refilter_bin_notes_content);
                 child.destroy ();
             }
             text.buffer.text = "";
+        }
+
+        private void refilter_bin_scenes_content () {
+            scenes.invalidate_filter ();
+            chapters.invalidate_filter ();
+        }
+
+        private void refilter_bin_notes_content () {
+            notes.invalidate_filter ();
+            chapters.invalidate_filter ();
+        }
+
+        private void refilter_bin_chapters_content () {
+            chapters.invalidate_filter ();
+        }
+
+        private bool scenes_filter_func (Gtk.ListBoxRow child) {
+            var item = (Widgets.Scene)child;
+            return item.scene.bin || item.scene.parent.bin;
+        }
+
+        private bool notes_filter_func (Gtk.ListBoxRow child) {
+            var item = (Widgets.Note)child;
+            return item.note.bin || item.note.parent.bin;
+        }
+
+        private bool chapters_filter_func (Gtk.ListBoxRow child) {
+            var item = (Widgets.Chapter)child;
+            return item.chapter.bin || item.chapter.has_bin_children ();
         }
     }
 }

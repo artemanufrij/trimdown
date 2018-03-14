@@ -29,7 +29,7 @@ namespace TrimDown.Objects {
     public class BaseObject : GLib.Object {
         public signal void content_saved ();
         public signal void title_saved (string title);
-        public signal void moved_into_bin ();
+        public signal void bin_location_changed ();
 
         public string path { get; protected set; }
         public string title { get; protected set; }
@@ -80,7 +80,14 @@ namespace TrimDown.Objects {
         public void move_into_bin () {
             if (set_boolean_property ("General", "bin", true)) {
                 bin = true;
-                moved_into_bin ();
+                bin_location_changed ();
+            }
+        }
+
+        public void restore_from_bin () {
+            if (set_boolean_property ("General", "bin", false)) {
+                bin = false;
+                bin_location_changed ();
             }
         }
 

@@ -40,7 +40,7 @@ namespace TrimDown.Widgets {
         private void build_ui () {
             this.width_request = 200;
             chapters = new Gtk.ListBox ();
-            chapters.set_sort_func (chapters_sort_func);
+            chapters.set_sort_func (Utils.chapters_sort_func);
             chapters.set_filter_func (chapters_filter_func);
             chapters.selected_rows_changed.connect (
                 () => {
@@ -83,7 +83,7 @@ namespace TrimDown.Widgets {
             current_project = project;
             foreach (var chapter in project.chapters) {
                 var item = new Widgets.Chapter (chapter);
-                chapter.moved_into_bin.connect (
+                chapter.bin_location_changed.connect (
                     () => {
                         chapters.invalidate_filter ();
                     });
@@ -100,7 +100,7 @@ namespace TrimDown.Widgets {
         public void add_chapter (Objects.Chapter chapter) {
             var item = new Widgets.Chapter (chapter);
             chapters.add (item);
-            chapter.moved_into_bin.connect (
+            chapter.bin_location_changed.connect (
                 () => {
                     chapters.invalidate_filter ();
                 });
@@ -111,18 +111,6 @@ namespace TrimDown.Widgets {
             foreach (var child in chapters.get_children ()) {
                 child.destroy ();
             }
-        }
-
-        private int chapters_sort_func (Gtk.ListBoxRow child1, Gtk.ListBoxRow child2) {
-            var item1 = (Widgets.Chapter)child1;
-            var item2 = (Widgets.Chapter)child2;
-            if (item1 != null && item2 != null) {
-                if (item1.order != item2.order) {
-                    return item1.order - item2.order;
-                }
-                return item1.title.collate (item2.title);
-            }
-            return 0;
         }
 
         private bool chapters_filter_func (Gtk.ListBoxRow child) {

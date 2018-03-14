@@ -48,27 +48,48 @@ namespace TrimDown.Widgets {
             label.expand = true;
             label.xalign = 0;
 
-            Gtk.Button action_button = null;
-            if (scene.bin) {
-                action_button = new Gtk.Button.from_icon_name ("edit-redo-symbolic");
-            } else {
-                action_button = new Gtk.Button.from_icon_name ("user-trash-symbolic");
-            }
-            action_button.get_style_context ().add_class ("flat");
-            action_button.can_focus = false;
-            action_button.halign = Gtk.Align.END;
-            action_button.opacity = 0;
-
-            action_button.clicked.connect (
-                () => {
-                    scene.move_into_bin ();
-                });
-            action_button.enter_notify_event.connect (
-                (event) => {
-                    action_button.opacity = 1;
-                    return false;
-                });
+            var event_box = new Gtk.EventBox ();
             var content = new Gtk.Grid ();
+
+            if (!scene.parent.bin) {
+                Gtk.Button action_button = null;
+                if (scene.bin) {
+                    action_button = new Gtk.Button.from_icon_name ("edit-redo-symbolic");
+                } else {
+                    action_button = new Gtk.Button.from_icon_name ("user-trash-symbolic");
+                }
+                action_button.get_style_context ().add_class ("flat");
+                action_button.can_focus = false;
+                action_button.halign = Gtk.Align.END;
+                action_button.opacity = 0;
+
+                action_button.clicked.connect (
+                    () => {
+                        if (scene.bin) {
+                            scene.restore_from_bin ();
+                        } else {
+                            scene.move_into_bin ();
+                        }
+                    });
+                action_button.enter_notify_event.connect (
+                    (event) => {
+                        action_button.opacity = 1;
+                        return false;
+                    });
+
+                event_box.enter_notify_event.connect (
+                    (event) => {
+                        action_button.opacity = 0.5;
+                        return false;
+                    });
+                event_box.leave_notify_event.connect (
+                    (event) => {
+                        action_button.opacity = 0;
+                        return false;
+                    });
+                content.attach (action_button, 1, 0);
+            }
+
 
             switch (item_style) {
             case Enums.ItemStyle.BIN :
@@ -81,19 +102,7 @@ namespace TrimDown.Widgets {
             content.margin_right = 0;
 
             content.attach (label, 0, 0);
-            content.attach (action_button, 1, 0);
 
-            var event_box = new Gtk.EventBox ();
-            event_box.enter_notify_event.connect (
-                (event) => {
-                    action_button.opacity = 0.5;
-                    return false;
-                });
-            event_box.leave_notify_event.connect (
-                (event) => {
-                    action_button.opacity = 0;
-                    return false;
-                });
             event_box.add (content);
 
             this.add (event_box);

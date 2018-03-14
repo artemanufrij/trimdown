@@ -43,7 +43,7 @@ namespace TrimDown.Widgets {
             this.height_request = 320;
 
             notes = new Gtk.ListBox ();
-            notes.set_sort_func (notes_sort_func);
+            notes.set_sort_func (Utils.notes_sort_func);
             notes.set_filter_func (notes_filter_func);
             notes.selected_rows_changed.connect (
                 () => {
@@ -116,7 +116,7 @@ namespace TrimDown.Widgets {
             reset ();
             foreach (var note in chapter.notes) {
                 var item = new Widgets.Note (note);
-                note.moved_into_bin.connect (
+                note.bin_location_changed.connect (
                     () => {
                         notes.invalidate_filter ();
                     });
@@ -139,7 +139,7 @@ namespace TrimDown.Widgets {
         private void add_note (Objects.Note note) {
             var item = new Widgets.Note (note);
             notes.add (item);
-            note.moved_into_bin.connect (
+            note.bin_location_changed.connect (
                 () => {
                     notes.invalidate_filter ();
                 });
@@ -185,15 +185,6 @@ namespace TrimDown.Widgets {
                     title.text = "";
                 }
             }
-        }
-
-        private int notes_sort_func (Gtk.ListBoxRow child1, Gtk.ListBoxRow child2) {
-            var item1 = (Widgets.Note)child1;
-            var item2 = (Widgets.Note)child2;
-            if (item1 != null && item2 != null) {
-                return item1.title.collate (item2.title);
-            }
-            return 0;
         }
 
         private bool notes_filter_func (Gtk.ListBoxRow child) {
