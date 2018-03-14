@@ -67,44 +67,41 @@ namespace TrimDown.Widgets {
 
             action_button = new Gtk.Button ();
 
-            if (!scene.parent.bin) {
-                if (scene.bin) {
-                    action_button.set_image (redo_img);
-                } else {
-                    action_button.set_image (trash_img);
-                }
-                action_button.get_style_context ().add_class ("flat");
-                action_button.can_focus = false;
-                action_button.halign = Gtk.Align.END;
-                action_button.opacity = 0;
-
-                action_button.clicked.connect (
-                    () => {
-                        if (scene.bin) {
-                            scene.restore_from_bin ();
-                        } else {
-                            scene.move_into_bin ();
-                        }
-                    });
-                action_button.enter_notify_event.connect (
-                    (event) => {
-                        action_button.opacity = 1;
-                        return false;
-                    });
-
-                event_box.enter_notify_event.connect (
-                    (event) => {
-                        action_button.opacity = 0.5;
-                        return false;
-                    });
-                event_box.leave_notify_event.connect (
-                    (event) => {
-                        action_button.opacity = 0;
-                        return false;
-                    });
-                content.attach (action_button, 1, 0);
+            if (scene.bin) {
+                action_button.set_image (redo_img);
+            } else {
+                action_button.set_image (trash_img);
             }
+            action_button.get_style_context ().add_class ("flat");
+            action_button.can_focus = false;
+            action_button.halign = Gtk.Align.END;
+            action_button.opacity = 0;
 
+            action_button.clicked.connect (
+                () => {
+                    if (scene.bin) {
+                        scene.restore_from_bin ();
+                    } else {
+                        scene.move_into_bin ();
+                    }
+                });
+            action_button.enter_notify_event.connect (
+                (event) => {
+                    action_button.opacity = 1;
+                    return false;
+                });
+
+            event_box.enter_notify_event.connect (
+                (event) => {
+                    action_button.opacity = 0.5;
+                    return false;
+                });
+            event_box.leave_notify_event.connect (
+                (event) => {
+                    action_button.opacity = 0;
+                    return false;
+                });
+            content.attach (action_button, 1, 0);
 
             switch (item_style) {
             case Enums.ItemStyle.BIN :

@@ -43,10 +43,14 @@ namespace TrimDown.Widgets {
             this.chapter = chapter;
             this.chapter.bin_location_changed.connect (
                 () => {
+                    label.opacity = 1;
                     if (chapter.bin) {
                         action_button.set_image (redo_img);
                     } else {
                         action_button.set_image (trash_img);
+                        if (item_style == Enums.ItemStyle.BIN) {
+                            label.opacity = 0.5;
+                        }
                     }
                 });
             this.item_style = item_style;
@@ -57,6 +61,7 @@ namespace TrimDown.Widgets {
             label = new Gtk.Label (chapter.name);
             label.expand = true;
             label.xalign = 0;
+            label.opacity = 1;
 
             var event_box = new Gtk.EventBox ();
             var content = new Gtk.Grid ();
@@ -67,10 +72,14 @@ namespace TrimDown.Widgets {
 
             action_button = new Gtk.Button ();
 
+
             if (chapter.bin) {
                 action_button.set_image (redo_img);
             } else {
                 action_button.set_image (trash_img);
+                if (item_style == Enums.ItemStyle.BIN) {
+                    label.opacity = 0.5;
+                }
             }
 
             action_button.get_style_context ().add_class ("flat");

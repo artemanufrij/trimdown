@@ -62,51 +62,50 @@ namespace TrimDown.Widgets {
             var event_box = new Gtk.EventBox ();
             var content = new Gtk.Grid ();
             content.margin = 6;
+            content.margin_right = 0;
 
             redo_img = new Gtk.Image.from_icon_name ("edit-redo-symbolic", Gtk.IconSize.BUTTON);
             trash_img = new Gtk.Image.from_icon_name ("user-trash-symbolic", Gtk.IconSize.BUTTON);
 
             action_button = new Gtk.Button ();
 
-            if (!note.parent.bin) {
-                if (note.bin) {
-                    action_button.set_image (redo_img);
-                } else {
-                    action_button.set_image (trash_img);
-                }
-                action_button.get_style_context ().add_class ("flat");
-                action_button.can_focus = false;
-                action_button.halign = Gtk.Align.END;
-                action_button.opacity = 0;
-
-                action_button.clicked.connect (
-                    () => {
-                        if (note.bin) {
-                            note.restore_from_bin ();
-                        } else {
-                            note.move_into_bin ();
-                        }
-                    });
-                action_button.enter_notify_event.connect (
-                    (event) => {
-                        action_button.opacity = 1;
-                        return false;
-                    });
-
-                event_box.enter_notify_event.connect (
-                    (event) => {
-                        action_button.opacity = 0.5;
-                        return false;
-                    });
-                event_box.leave_notify_event.connect (
-                    (event) => {
-                        action_button.opacity = 0;
-                        return false;
-                    });
-                content.attach (action_button, 1, 0);
+            if (note.bin) {
+                action_button.set_image (redo_img);
+            } else {
+                action_button.set_image (trash_img);
             }
+            action_button.get_style_context ().add_class ("flat");
+            action_button.can_focus = false;
+            action_button.halign = Gtk.Align.END;
+            action_button.opacity = 0;
 
-            content.margin_right = 0;
+            action_button.clicked.connect (
+                () => {
+                    if (note.bin) {
+                        note.restore_from_bin ();
+                    } else {
+                        note.move_into_bin ();
+                    }
+                });
+            action_button.enter_notify_event.connect (
+                (event) => {
+                    action_button.opacity = 1;
+                    return false;
+                });
+
+            event_box.enter_notify_event.connect (
+                (event) => {
+                    action_button.opacity = 0.5;
+                    return false;
+                });
+            event_box.leave_notify_event.connect (
+                (event) => {
+                    action_button.opacity = 0;
+                    return false;
+                });
+            content.attach (action_button, 1, 0);
+
+
             content.attach (label, 0, 0);
             event_box.add (content);
 

@@ -144,7 +144,7 @@ namespace TrimDown.Widgets {
             reset ();
 
             foreach (var chapter in project.chapters) {
-                var item = new Chapter (chapter);
+                var item = new Chapter (chapter, Enums.ItemStyle.BIN);
                 chapter.bin_location_changed.connect (refilter_bin_chapters_content);
                 chapters.add (item);
             }
