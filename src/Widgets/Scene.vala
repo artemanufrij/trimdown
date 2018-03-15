@@ -42,12 +42,16 @@ namespace TrimDown.Widgets {
         public Scene (Objects.Scene scene, Enums.ItemStyle item_style = Enums.ItemStyle.DEFAULT) {
             this.scene = scene;
             this.scene.bin_location_changed.connect (
-                () => {
-                    if (scene.bin) {
+                (bin) => {
+                    if (bin) {
                         action_button.set_image (redo_img);
                     } else {
                         action_button.set_image (trash_img);
                     }
+                });
+            this.scene.parent.bin_location_changed.connect (
+                (bin) => {
+                    action_button.visible = bin;
                 });
             this.item_style = item_style;
 
@@ -58,14 +62,18 @@ namespace TrimDown.Widgets {
             label = new Gtk.Label (scene.name);
             label.expand = true;
             label.xalign = 0;
+            label.margin = 12;
 
             var event_box = new Gtk.EventBox ();
             var content = new Gtk.Grid ();
 
             redo_img = new Gtk.Image.from_icon_name ("edit-redo-symbolic", Gtk.IconSize.BUTTON);
+            redo_img.tooltip_text = _("Restore from Bin");
             trash_img = new Gtk.Image.from_icon_name ("user-trash-symbolic", Gtk.IconSize.BUTTON);
+            trash_img.tooltip_text = _("Move into Bin");
 
             action_button = new Gtk.Button ();
+            action_button.valign = Gtk.Align.CENTER;
 
             if (scene.bin) {
                 action_button.set_image (redo_img);
@@ -103,13 +111,8 @@ namespace TrimDown.Widgets {
                 });
             content.attach (action_button, 1, 0);
 
-            switch (item_style) {
-            case Enums.ItemStyle.BIN :
-                content.margin = 6;
-                break;
-            default :
-                content.margin = 12;
-                break;
+            if (item_style == Enums.ItemStyle.BIN) {
+                label.margin = 6;
             }
 
             content.margin_right = 0;
@@ -118,6 +121,10 @@ namespace TrimDown.Widgets {
 
             this.add (event_box);
             this.show_all ();
+
+            if (scene.parent.bin) {
+                action_button.hide ();
+            }
         }
     }
 }

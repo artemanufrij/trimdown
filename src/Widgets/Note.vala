@@ -44,12 +44,16 @@ namespace TrimDown.Widgets {
                     (this.parent as Gtk.ListBox).invalidate_sort ();
                 });
             this.note.bin_location_changed.connect (
-                () => {
-                    if (note.bin) {
+                (bin) => {
+                    if (bin) {
                         action_button.set_image (redo_img);
                     } else {
                         action_button.set_image (trash_img);
                     }
+                });
+            this.note.parent.bin_location_changed.connect (
+                (bin) => {
+                    action_button.visible = bin;
                 });
             build_ui ();
         }
@@ -58,16 +62,18 @@ namespace TrimDown.Widgets {
             label = new Gtk.Label (note.title);
             label.xalign = 0;
             label.expand = true;
+            label.margin = 6;
 
             var event_box = new Gtk.EventBox ();
             var content = new Gtk.Grid ();
-            content.margin = 6;
-            content.margin_right = 0;
 
             redo_img = new Gtk.Image.from_icon_name ("edit-redo-symbolic", Gtk.IconSize.BUTTON);
+            redo_img.tooltip_text = _("Restore from Bin");
             trash_img = new Gtk.Image.from_icon_name ("user-trash-symbolic", Gtk.IconSize.BUTTON);
+            trash_img.tooltip_text = _("Move into Bin");
 
             action_button = new Gtk.Button ();
+            action_button.valign = Gtk.Align.CENTER;
 
             if (note.bin) {
                 action_button.set_image (redo_img);
@@ -105,12 +111,15 @@ namespace TrimDown.Widgets {
                 });
             content.attach (action_button, 1, 0);
 
-
             content.attach (label, 0, 0);
             event_box.add (content);
 
             this.add (event_box);
             this.show_all ();
+
+            if (note.parent.bin) {
+                action_button.hide ();
+            }
         }
     }
 }

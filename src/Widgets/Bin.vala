@@ -61,14 +61,17 @@ namespace TrimDown.Widgets {
 
             scroll.add (text);
 
+            var grid = new Gtk.Grid ();
+            grid.attach (scene, 0, 0);
+            grid.attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 0, 1);
+            grid.attach (note, 0, 2);
+            grid.attach (new Gtk.Separator (Gtk.Orientation.VERTICAL), 1, 0, 1, 3);
+            grid.attach (scroll, 2, 0, 3, 3);
+
             this.attach (chapter, 0, 0, 1, 4);
             this.attach (new Gtk.Separator (Gtk.Orientation.VERTICAL), 1, 0, 1, 4);
-            this.attach (title, 2, 0, 5, 1);
-            this.attach (scene, 2, 1, 1, 1);
-            this.attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 2, 2, 1, 1);
-            this.attach (note, 2, 3, 1, 1);
-            this.attach (new Gtk.Separator (Gtk.Orientation.VERTICAL), 3, 1, 1, 3);
-            this.attach (scroll, 4, 1, 3, 3);
+            this.attach (title, 2, 0, 3, 1);
+            this.attach (grid, 2, 1, 3, 1);
 
             this.show_all ();
         }

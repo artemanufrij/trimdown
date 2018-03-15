@@ -40,20 +40,23 @@ namespace TrimDown.Widgets {
         Gtk.Image trash_img;
 
         public Chapter (Objects.Chapter chapter, Enums.ItemStyle item_style = Enums.ItemStyle.DEFAULT) {
+            this.item_style = item_style;
+
             this.chapter = chapter;
             this.chapter.bin_location_changed.connect (
-                () => {
+                (bin) => {
                     label.opacity = 1;
-                    if (chapter.bin) {
+                    if (bin) {
                         action_button.set_image (redo_img);
                     } else {
-                        action_button.set_image (trash_img);
                         if (item_style == Enums.ItemStyle.BIN) {
                             label.opacity = 0.5;
+                            action_button.hide ();
+                        } else {
+                            action_button.set_image (trash_img);
                         }
                     }
                 });
-            this.item_style = item_style;
             build_ui ();
         }
 
@@ -62,16 +65,18 @@ namespace TrimDown.Widgets {
             label.expand = true;
             label.xalign = 0;
             label.opacity = 1;
+            label.margin = 12;
 
             var event_box = new Gtk.EventBox ();
             var content = new Gtk.Grid ();
-            content.margin = 12;
 
             redo_img = new Gtk.Image.from_icon_name ("edit-redo-symbolic", Gtk.IconSize.BUTTON);
+            redo_img.tooltip_text = _("Restore from Bin");
             trash_img = new Gtk.Image.from_icon_name ("user-trash-symbolic", Gtk.IconSize.BUTTON);
+            trash_img.tooltip_text = _("Move into Bin");
 
             action_button = new Gtk.Button ();
-
+            action_button.valign = Gtk.Align.CENTER;
 
             if (chapter.bin) {
                 action_button.set_image (redo_img);
@@ -111,16 +116,18 @@ namespace TrimDown.Widgets {
                     action_button.opacity = 0;
                     return false;
                 });
+
             content.attach (action_button, 1, 0);
-
-
-            content.margin_right = 0;
             content.attach (label, 0, 0);
 
             event_box.add (content);
 
             this.add (event_box);
             this.show_all ();
+
+            if (!chapter.bin && item_style == Enums.ItemStyle.BIN) {
+                action_button.hide ();
+            }
         }
     }
 }

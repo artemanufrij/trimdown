@@ -128,7 +128,7 @@ namespace TrimDown {
                     if (writer.current_project != null) {
                         bin.show_content (writer.current_project);
                     }
-                    bin_popup.show_all ();
+                    bin_popup.show ();
                 });
 
             headerbar.pack_end (bin_items);
