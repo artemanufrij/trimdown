@@ -31,6 +31,7 @@ namespace TrimDown.Widgets {
         Gtk.ListBox scenes;
         Gtk.ListBox notes;
         Gtk.SourceView text;
+        Gtk.Entry title;
 
         public Bin () {
             build_ui ();
@@ -47,19 +48,27 @@ namespace TrimDown.Widgets {
 
             var note = build_note_content ();
 
+            title = new Gtk.Entry ();
+            title.get_style_context ().add_class ("h3");
+            title.xalign = 0.5f;
+            title.has_frame = false;
+            title.editable = false;
+
             var scroll = new Gtk.ScrolledWindow (null, null);
             text = new Gtk.SourceView ();
             text.expand = true;
             text.editable = false;
+
             scroll.add (text);
 
-            this.attach (chapter, 0, 0, 1, 3);
-            this.attach (new Gtk.Separator (Gtk.Orientation.VERTICAL), 1, 0, 1, 3);
-            this.attach (scene, 2, 0);
-            this.attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 2, 1);
-            this.attach (note, 2, 2);
-            this.attach (new Gtk.Separator (Gtk.Orientation.VERTICAL), 3, 0, 1, 3);
-            this.attach (scroll, 4, 0, 3, 3);
+            this.attach (chapter, 0, 0, 1, 4);
+            this.attach (new Gtk.Separator (Gtk.Orientation.VERTICAL), 1, 0, 1, 4);
+            this.attach (title, 2, 0, 5, 1);
+            this.attach (scene, 2, 1, 1, 1);
+            this.attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 2, 2, 1, 1);
+            this.attach (note, 2, 3, 1, 1);
+            this.attach (new Gtk.Separator (Gtk.Orientation.VERTICAL), 3, 1, 1, 3);
+            this.attach (scroll, 4, 1, 3, 3);
 
             this.show_all ();
         }
@@ -89,6 +98,8 @@ namespace TrimDown.Widgets {
                             scene.bin_location_changed.connect (refilter_bin_scenes_content);
                             scenes.add (item);
                         }
+
+                        title.text = chapter.title;
                     }
                 });
 

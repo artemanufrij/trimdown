@@ -115,6 +115,10 @@ namespace TrimDown.Widgets {
             }
         }
 
+        public void unselect_all () {
+            chapters.unselect_all ();
+        }
+
         private bool chapters_filter_func (Gtk.ListBoxRow child) {
             var item = (Chapter)child;
             return !item.chapter.bin;

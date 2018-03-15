@@ -127,9 +127,13 @@ namespace TrimDown.Widgets.Views {
         private void show_scene (Objects.Scene scene) {
             if (current_scene != null) {
                 current_scene.save_content (body.buffer.text.strip ());
+                current_scene.bin_location_changed.disconnect (clear_scene);
             }
+
             current_scene = scene;
             body.buffer.text = scene.get_content ();
+
+            current_scene.bin_location_changed.connect (clear_scene);
         }
 
         private void chapter_created (Objects.Chapter chapter) {
@@ -138,9 +142,24 @@ namespace TrimDown.Widgets.Views {
         }
 
         private void clear () {
-            title.text = "";
-            body.buffer.text = "";
-            scenes.reset ();
+            if (current_chapter.bin) {
+                current_chapter = null;
+
+                title.text = "";
+                body.buffer.text = "";
+                scenes.reset ();
+                chapters.unselect_all ();
+            }
+        }
+
+        private void clear_scene () {
+            if (current_scene.bin) {
+                current_scene.save_content (body.buffer.text.strip ());
+                current_scene = null;
+
+                body.buffer.text = "";
+                scenes.unselect_all ();
+            }
         }
     }
 }

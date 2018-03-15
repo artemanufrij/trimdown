@@ -127,6 +127,10 @@ namespace TrimDown.Widgets {
             item.activate ();
         }
 
+        public void unselect_all () {
+            scenes.unselect_all ();
+        }
+
         private bool scenes_filter_func (Gtk.ListBoxRow child) {
             var item = (Scene)child;
             return !item.scene.bin;
