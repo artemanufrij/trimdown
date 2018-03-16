@@ -144,6 +144,7 @@ namespace TrimDown.Widgets.Views {
         private void clear () {
             if (current_chapter.bin) {
                 current_chapter = null;
+                current_scene = null;
 
                 title.text = "";
                 body.buffer.text = "";

@@ -84,8 +84,14 @@ namespace TrimDown.Widgets {
             foreach (var chapter in project.chapters) {
                 var item = new Chapter (chapter);
                 chapter.bin_location_changed.connect (
-                    () => {
+                    (bin) => {
+                        if (bin) {
+                            chapters.unselect_all ();
+                        }
                         chapters.invalidate_filter ();
+                        if (!bin) {
+                            item.activate ();
+                        }
                     });
                 chapters.add (item);
             }
@@ -103,8 +109,14 @@ namespace TrimDown.Widgets {
             var item = new Chapter (chapter);
             chapters.add (item);
             chapter.bin_location_changed.connect (
-                () => {
+                (bin) => {
+                    if (bin) {
+                        chapters.unselect_all ();
+                    }
                     chapters.invalidate_filter ();
+                    if (!bin) {
+                        item.activate ();
+                    }
                 });
             item.activate ();
         }

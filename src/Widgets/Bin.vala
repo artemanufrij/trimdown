@@ -200,6 +200,7 @@ namespace TrimDown.Widgets {
             notes.invalidate_filter ();
             scenes.invalidate_filter ();
             text.buffer.text = "";
+            title.text = "";
         }
 
         private bool scenes_filter_func (Gtk.ListBoxRow child) {

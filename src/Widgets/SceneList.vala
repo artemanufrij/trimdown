@@ -12,7 +12,7 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
  * The Noise authors hereby grant permission for non-GPL compatible
  * GStreamer plugins to be used and distributed together with GStreamer
@@ -112,6 +112,7 @@ namespace TrimDown.Widgets {
         }
 
         public void reset () {
+            current_chapter = null;
             foreach (var child in scenes.get_children ()) {
                 child.destroy ();
             }
