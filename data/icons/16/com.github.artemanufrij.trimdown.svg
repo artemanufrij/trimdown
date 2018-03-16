@@ -28,8 +28,8 @@
      id="namedview21"
      showgrid="true"
      inkscape:zoom="45.254834"
-     inkscape:cx="8.1820055"
-     inkscape:cy="8.1801672"
+     inkscape:cx="2.9727066"
+     inkscape:cy="8.1728294"
      inkscape:window-x="0"
      inkscape:window-y="30"
      inkscape:window-maximized="1"
@@ -52,6 +52,18 @@
   </sodipodi:namedview>
   <defs
      id="defs3937">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4176">
+      <stop
+         style="stop-color:#95a3ab;stop-opacity:1"
+         offset="0"
+         id="stop4178" />
+      <stop
+         style="stop-color:#667885;stop-opacity:1"
+         offset="1"
+         id="stop4180" />
+    </linearGradient>
     <linearGradient
        x1="71.204407"
        y1="6.2375584"
@@ -157,6 +169,17 @@
          style="stop-color:#ffffff;stop-opacity:0.39215687"
          offset="1" />
     </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4176"
+       id="radialGradient4182"
+       cx="8"
+       cy="3.5000002"
+       fx="8"
+       fy="3.5000002"
+       r="6"
+       gradientTransform="matrix(-1,0,0,-1.6666668,16,10.833335)"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <metadata
      id="metadata3940">
@@ -166,40 +189,33 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <rect
-     style="opacity:1;fill:#cc3b02;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="opacity:1;fill:url(#radialGradient4182);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect4162"
      width="12"
-     height="11"
+     height="10"
      x="2"
-     y="4"
-     ry="2"
+     y="4.9999995"
+     ry="1.9999999"
      rx="2" />
   <rect
-     style="opacity:1;fill:#ffffad;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect4168"
-     width="12"
-     height="4"
-     x="2"
-     y="1" />
-  <rect
-     style="opacity:0.25;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.37612271;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect4180"
-     width="10.623878"
-     height="0.62387735"
-     x="2.6880615"
-     y="6.6880608" />
-  <rect
-     style="opacity:1;fill:#f37329;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="opacity:1;fill:#485a6c;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect4164"
      width="14"
      height="2"
      x="1"
      y="4.9999995" />
+  <rect
+     style="opacity:1;fill:#ffffad;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect4168"
+     width="12"
+     height="4.999999"
+     x="2"
+     y="0.99999976" />
   <circle
      style="opacity:1;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.33333337;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="path4182"
@@ -207,7 +223,7 @@
      cy="10.000004"
      r="1" />
   <rect
-     style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="opacity:1;fill:#1a1a1a;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect4171"
      width="5"
      height="1"
@@ -219,7 +235,7 @@
      height="1"
      width="4"
      id="rect4173"
-     style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+     style="opacity:1;fill:#1a1a1a;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   <circle
      style="opacity:1;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.33333337;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="path4182-3"
@@ -250,4 +266,25 @@
      cx="12"
      cy="13.000004"
      r="1" />
+  <rect
+     y="3.9999995"
+     x="3"
+     height="1"
+     width="3.000001"
+     id="rect4169"
+     style="opacity:1;fill:#1a1a1a;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  <rect
+     style="opacity:1;fill:#1a1a1a;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect4172"
+     width="4"
+     height="1"
+     x="7"
+     y="4.0000005" />
+  <rect
+     y="4.0000005"
+     x="12.000006"
+     height="1"
+     width="1.0000012"
+     id="rect4174"
+     style="opacity:1;fill:#1a1a1a;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
 </svg>
