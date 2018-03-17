@@ -94,6 +94,7 @@ namespace TrimDown.Widgets {
             current_chapter = chapter;
             foreach (var scene in chapter.scenes) {
                 var item = new Scene (scene);
+                item.reorder_request.connect (reorder);
                 scene.bin_location_changed.connect (
                 () => {
                     scenes.invalidate_filter ();
@@ -114,12 +115,14 @@ namespace TrimDown.Widgets {
         public void reset () {
             current_chapter = null;
             foreach (var child in scenes.get_children ()) {
+                (child as Scene).reorder_request.disconnect (reorder);
                 child.destroy ();
             }
         }
 
         public void add_scene (Objects.Scene scene) {
             var item = new Scene (scene);
+            item.reorder_request.connect (reorder);
             scenes.add (item);
             scene.bin_location_changed.connect (
                 () => {
@@ -130,6 +133,13 @@ namespace TrimDown.Widgets {
 
         public void unselect_all () {
             scenes.unselect_all ();
+        }
+
+        private void reorder (int from, int to) {
+            if (current_chapter != null) {
+                current_chapter.reorder_scenes (from, to);
+                scenes.invalidate_sort ();
+            }
         }
 
         private bool scenes_filter_func (Gtk.ListBoxRow child) {

@@ -60,4 +60,16 @@ order=""" + order.to_string () + """
 bin=false
 """;
     }
+
+    public static void set_custom_css_style (Gdk.Screen screen) {
+        Granite.Widgets.Utils.set_theming_for_screen (
+            screen,
+                """
+                    .chapter-drag-begin {
+                        border-top: 1px solid #666666;
+                    }
+                """,
+                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            );
+    }
 }

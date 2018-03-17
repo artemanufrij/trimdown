@@ -48,7 +48,7 @@ namespace TrimDown.Objects {
             this.kind = kind;
             this.title = Path.get_basename (path);
 
-            chapters_path = Path.build_filename (path, _("Chapters"));
+            chapters_path = Path.build_filename (path, _ ("Chapters"));
             properties_path = Path.build_filename (path, title + ".td");
 
             init ();
@@ -83,7 +83,7 @@ namespace TrimDown.Objects {
                     }
                 }
             } catch (Error err) {
-                    warning (err.message);
+                warning (err.message);
             }
 
             return return_value;
@@ -91,8 +91,8 @@ namespace TrimDown.Objects {
 
         public Chapter create_new_chapter (string name, int order) {
             var new_chapter = new Chapter (this, name, order);
-            new_chapter.create_new_scene (_("Scene %d").printf (1), 0);
-            new_chapter.create_new_note (_("Notes"));
+            new_chapter.create_new_scene (_ ("Scene %d").printf (1), 0);
+            new_chapter.create_new_note (_ ("Notes"));
             return new_chapter;
         }
 
@@ -100,13 +100,41 @@ namespace TrimDown.Objects {
             int i = 1;
             string new_chapter_name = "";
             do {
-                new_chapter_name = _("Chapter %d").printf (i);
+                new_chapter_name = _ ("Chapter %d").printf (i);
                 i++;
             } while (FileUtils.test (Path.build_filename (chapters_path, new_chapter_name), FileTest.EXISTS));
 
             var new_chapter = create_new_chapter (new_chapter_name, i);
             chapter_created (new_chapter);
             return new_chapter;
+        }
+
+        public void reorder_chapters (int from, int to) {
+            var from_path = "";
+            foreach (var chapter in chapters) {
+                if (chapter.order == from) {
+                    from_path = chapter.path;
+                    if (from > to) {
+                        chapter.set_new_order (to);
+                    } else {
+                        chapter.set_new_order (to - 1);
+                    }
+                }
+            }
+
+            if (from > to) {
+                foreach (var chapter in chapters) {
+                    if (chapter.order >= to && chapter.order < from && chapter.path != from_path) {
+                        chapter.set_new_order (chapter.order + 1);
+                    }
+                }
+            } else {
+                foreach (var chapter in chapters) {
+                    if (chapter.order < to && chapter.order >= from && chapter.path != from_path) {
+                        chapter.set_new_order (chapter.order - 1);
+                    }
+                }
+            }
         }
     }
 }

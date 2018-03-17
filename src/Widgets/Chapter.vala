@@ -27,6 +27,8 @@
 
 namespace TrimDown.Widgets {
     public class Chapter : Gtk.ListBoxRow {
+        public signal void reorder_request (int from, int to);
+
         public Objects.Chapter chapter { get; private set; }
 
         public string title { get { return chapter.title; } }
@@ -39,7 +41,10 @@ namespace TrimDown.Widgets {
         Gtk.Image redo_img;
         Gtk.Image trash_img;
 
+        const Gtk.TargetEntry[] targetentries = {{ "STRING", 0, 0 }};
+
         public Chapter (Objects.Chapter chapter, Enums.ItemStyle item_style = Enums.ItemStyle.DEFAULT) {
+
             this.item_style = item_style;
 
             this.chapter = chapter;
@@ -68,6 +73,30 @@ namespace TrimDown.Widgets {
             label.margin = 12;
 
             var event_box = new Gtk.EventBox ();
+
+// DRAG DROP
+            Gtk.drag_source_set (event_box, Gdk.ModifierType.BUTTON1_MASK, targetentries, Gdk.DragAction.MOVE);
+            event_box.drag_data_get.connect (on_drag_data_get);
+
+            Gtk.drag_dest_set (event_box, Gtk.DestDefaults.ALL, targetentries, Gdk.DragAction.MOVE);
+            event_box.drag_leave.connect (
+                (context, time) => {
+                    label.margin_top = 12;
+                    this.get_style_context ().remove_class ("chapter-drag-begin");
+                });
+            event_box.drag_motion.connect (
+                (context, x, y, time) => {
+                    label.margin_top = 11;
+                    Gtk.drag_unhighlight (event_box);
+                    this.get_style_context ().add_class ("chapter-drag-begin");
+                    return false;
+                });
+            event_box.drag_data_received.connect (
+                (drag_context, x, y, data, info, time) => {
+                    on_drag_data_received (data.get_text ());
+                });
+
+
             var content = new Gtk.Grid ();
 
             redo_img = new Gtk.Image.from_icon_name ("edit-redo-symbolic", Gtk.IconSize.BUTTON);
@@ -127,6 +156,32 @@ namespace TrimDown.Widgets {
 
             if (!chapter.bin && item_style == Enums.ItemStyle.BIN) {
                 action_button.hide ();
+            }
+        }
+
+        private void on_drag_data_get (Gdk.DragContext context, Gtk.SelectionData selection_data, uint target_type, uint time) {
+            this.activate ();
+            selection_data.set_text ("Chapter:%d".printf (chapter.order), -1);
+        }
+
+        private void on_drag_data_received (string received) {
+            Regex reg_chapter_order;
+            try {
+                reg_chapter_order = new Regex ("(?<=Chapter:)\\d*");
+            } catch (Error err) {
+                return;
+            }
+
+            int source_chapter_order = chapter.order;
+
+            MatchInfo match;
+
+            if (reg_chapter_order.match (received, 0, out match)) {
+                source_chapter_order = int.parse (match.fetch (0));
+            }
+
+            if (source_chapter_order != chapter.order) {
+                reorder_request (source_chapter_order, chapter.order);
             }
         }
     }

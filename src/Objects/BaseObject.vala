@@ -129,6 +129,12 @@ namespace TrimDown.Objects {
             return save_property_file ();
         }
 
+        protected bool set_integer_property (string group, string key, int val) {
+            properties.set_integer (group, key, val);
+            return save_property_file ();
+        }
+
+
         private bool save_property_file () {
             try {
                 properties.save_to_file (properties_path);
@@ -144,6 +150,12 @@ namespace TrimDown.Objects {
                 title = new_title;
             }
             title_saved (title);
+        }
+
+        public void set_new_order (int new_order) {
+            if (set_integer_property ("General", "order", new_order)) {
+                order = new_order;
+            }
         }
     }
 }

@@ -27,6 +27,8 @@
 
 namespace TrimDown.Widgets {
     public class Scene : Gtk.ListBoxRow {
+        public signal void reorder_request (int from, int to);
+
         public Objects.Scene scene { get; private set; }
 
         public new string name { get { return scene.name; } }
@@ -38,6 +40,8 @@ namespace TrimDown.Widgets {
         Gtk.Button action_button;
         Gtk.Image redo_img;
         Gtk.Image trash_img;
+
+        const Gtk.TargetEntry[] targetentries = {{ "STRING", 0, 0 }};
 
         public Scene (Objects.Scene scene, Enums.ItemStyle item_style = Enums.ItemStyle.DEFAULT) {
             this.scene = scene;
@@ -65,12 +69,35 @@ namespace TrimDown.Widgets {
             label.margin = 12;
 
             var event_box = new Gtk.EventBox ();
+
+// DRAG DROP
+            Gtk.drag_source_set (event_box, Gdk.ModifierType.BUTTON1_MASK, targetentries, Gdk.DragAction.MOVE);
+            event_box.drag_data_get.connect (on_drag_data_get);
+
+            Gtk.drag_dest_set (event_box, Gtk.DestDefaults.ALL, targetentries, Gdk.DragAction.MOVE);
+            event_box.drag_leave.connect (
+                (context, time) => {
+                    label.margin_top = 12;
+                    this.get_style_context ().remove_class ("chapter-drag-begin");
+                });
+            event_box.drag_motion.connect (
+                (context, x, y, time) => {
+                    label.margin_top = 11;
+                    Gtk.drag_unhighlight (event_box);
+                    this.get_style_context ().add_class ("chapter-drag-begin");
+                    return false;
+                });
+            event_box.drag_data_received.connect (
+                (drag_context, x, y, data, info, time) => {
+                    on_drag_data_received (data.get_text ());
+                });
+
             var content = new Gtk.Grid ();
 
             redo_img = new Gtk.Image.from_icon_name ("edit-redo-symbolic", Gtk.IconSize.BUTTON);
-            redo_img.tooltip_text = _("Restore from Bin");
+            redo_img.tooltip_text = _ ("Restore from Bin");
             trash_img = new Gtk.Image.from_icon_name ("user-trash-symbolic", Gtk.IconSize.BUTTON);
-            trash_img.tooltip_text = _("Move into Bin");
+            trash_img.tooltip_text = _ ("Move into Bin");
 
             action_button = new Gtk.Button ();
             action_button.valign = Gtk.Align.CENTER;
@@ -124,6 +151,32 @@ namespace TrimDown.Widgets {
 
             if (scene.parent.bin) {
                 action_button.hide ();
+            }
+        }
+
+        private void on_drag_data_get (Gdk.DragContext context, Gtk.SelectionData selection_data, uint target_type, uint time) {
+            this.activate ();
+            selection_data.set_text ("Scene:%d".printf (scene.order), -1);
+        }
+
+        private void on_drag_data_received (string received) {
+            Regex reg_scene_order;
+            try {
+                reg_scene_order = new Regex ("(?<=Scene:)\\d*");
+            } catch (Error err) {
+                return;
+            }
+
+            int source_scene_order = scene.order;
+
+            MatchInfo match;
+
+            if (reg_scene_order.match (received, 0, out match)) {
+                source_scene_order = int.parse (match.fetch (0));
+            }
+
+            if (source_scene_order != scene.order) {
+                reorder_request (source_scene_order, scene.order);
             }
         }
     }

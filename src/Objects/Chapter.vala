@@ -173,5 +173,33 @@ namespace TrimDown.Objects {
             note_created (new_note);
             return new_note;
         }
+
+        public void reorder_scenes (int from, int to) {
+            var from_path = "";
+            foreach (var scene in scenes) {
+                if (scene.order == from) {
+                    from_path = scene.path;
+                    if (from > to) {
+                        scene.set_new_order (to);
+                    } else {
+                        scene.set_new_order (to - 1);
+                    }
+                }
+            }
+
+            if (from > to) {
+                foreach (var scene in scenes) {
+                    if (scene.order >= to && scene.order < from && scene.path != from_path) {
+                        scene.set_new_order (scene.order + 1);
+                    }
+                }
+            } else {
+                foreach (var scene in scenes) {
+                    if (scene.order < to && scene.order >= from && scene.path != from_path) {
+                        scene.set_new_order (scene.order - 1);
+                    }
+                }
+            }
+        }
     }
 }

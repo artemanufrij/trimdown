@@ -83,6 +83,7 @@ namespace TrimDown.Widgets {
             current_project = project;
             foreach (var chapter in project.chapters) {
                 var item = new Chapter (chapter);
+                item.reorder_request.connect (reorder);
                 chapter.bin_location_changed.connect (
                     (bin) => {
                         if (bin) {
@@ -107,6 +108,7 @@ namespace TrimDown.Widgets {
 
         public void add_chapter (Objects.Chapter chapter) {
             var item = new Chapter (chapter);
+            item.reorder_request.connect (reorder);
             chapters.add (item);
             chapter.bin_location_changed.connect (
                 (bin) => {
@@ -129,6 +131,13 @@ namespace TrimDown.Widgets {
 
         public void unselect_all () {
             chapters.unselect_all ();
+        }
+
+        private void reorder (int from, int to) {
+            if (current_project != null) {
+                current_project.reorder_chapters (from, to);
+                chapters.invalidate_sort ();
+            }
         }
 
         private bool chapters_filter_func (Gtk.ListBoxRow child) {
