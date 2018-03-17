@@ -129,6 +129,15 @@ namespace TrimDown.Widgets {
             }
         }
 
+        public void select_chapter (string chapter_name) {
+            foreach (var child in chapters.get_children ()) {
+                if ((child as Chapter).chapter.name == chapter_name) {
+                    child.activate ();
+                    break;
+                }
+            }
+        }
+
         public void unselect_all () {
             chapters.unselect_all ();
         }

@@ -46,6 +46,7 @@ executable(
     'src/Widgets/Views/Writer.vala',
     'src/Widgets/Views/Welcome.vala',
     'src/Dialogs/NewProject.vala',
+    'src/Dialogs/Preferences.vala',
     'src/Services/ProjectManager.vala',
     'src/Utils/Utils.vala',
     'src/Utils/Enums.vala',

@@ -120,6 +120,15 @@ namespace TrimDown.Widgets {
             }
         }
 
+        public void select_scene (string scene_name) {
+            foreach (var child in scenes.get_children ()) {
+                if ((child as Scene).scene.name == scene_name) {
+                    child.activate ();
+                    break;
+                }
+            }
+        }
+
         public void add_scene (Objects.Scene scene) {
             var item = new Scene (scene);
             item.reorder_request.connect (reorder);

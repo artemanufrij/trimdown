@@ -162,5 +162,13 @@ namespace TrimDown.Widgets.Views {
                 scenes.unselect_all ();
             }
         }
+
+        public void select_chapter (string chapter_name) {
+            chapters.select_chapter (chapter_name);
+        }
+
+        public void select_scene (string scene_name) {
+            scenes.select_scene (scene_name);
+        }
     }
 }

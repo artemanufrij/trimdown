@@ -35,5 +35,25 @@
 			<summary>Use Dark Theme.</summary>
 			<description>Use Dark Theme.</description>
 		</key>
+		<key name="remember-last-project" type="b">
+			<default>true</default>
+			<summary>Remember last Project.</summary>
+			<description>Remember last Project.</description>
+		</key>
+		<key name="last-project" type="s">
+			<default>""</default>
+			<summary>Last Project.</summary>
+			<description>Last Project.</description>
+		</key>
+		<key name="last-chapter" type="s">
+			<default>""</default>
+			<summary>Last Chapter.</summary>
+			<description>Last Chapter.</description>
+		</key>
+		<key name="last-scene" type="s">
+			<default>""</default>
+			<summary>Last Scene.</summary>
+			<description>Last Scene.</description>
+		</key>
 	</schema>
 </schemalist>

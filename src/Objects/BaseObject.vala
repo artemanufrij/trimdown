@@ -37,7 +37,7 @@ namespace TrimDown.Objects {
         public int order { get; protected set; default = 0; }
         public bool bin { get; protected set; default = false; }
 
-        protected string properties_path;
+        public string properties_path { get; protected set; }
         protected KeyFile properties;
 
         construct {

@@ -48,6 +48,7 @@ namespace TrimDown {
         public MainWindow () {
             load_settings ();
             build_ui ();
+            load_last_project ();
             this.configure_event.connect (
                 (event) => {
                     settings.window_width = event.width;
@@ -90,6 +91,8 @@ namespace TrimDown {
             var menu_item_preferences = new Gtk.MenuItem.with_label (_ ("Preferences"));
             menu_item_preferences.activate.connect (
                 () => {
+                    var preferences = new Dialogs.Preferences (this);
+                    preferences.run ();
                 });
             settings_menu.append (menu_item_preferences);
             settings_menu.show_all ();
@@ -192,6 +195,16 @@ namespace TrimDown {
             bin_items.show ();
         }
 
+        private void load_last_project () {
+            if (settings.remember_last_project && settings.last_project != "" && FileUtils.test (settings.last_project, FileTest.EXISTS)) {
+                var project = new Objects.Project (settings.last_project);
+                open_project (project);
+
+                writer.select_chapter (settings.last_chapter);
+                writer.select_scene (settings.last_scene);
+            }
+        }
+
         private void load_settings () {
             this.set_default_size (settings.window_width, settings.window_height);
 
@@ -207,6 +220,25 @@ namespace TrimDown {
             this.get_position (out x, out y);
             settings.window_x = x;
             settings.window_y = y;
+
+            if (settings.remember_last_project && writer.current_project != null) {
+                settings.last_project = writer.current_project.path;
+                if (writer.current_chapter != null) {
+                    settings.last_chapter = writer.current_chapter.name;
+                } else  {
+                    settings.last_chapter = "";
+                }
+
+                if (writer.current_scene != null) {
+                    settings.last_scene = writer.current_scene.name;
+                } else  {
+                    settings.last_scene = "";
+                }
+            } else {
+                settings.last_project = "";
+                settings.last_chapter = "";
+                settings.last_scene = "";
+            }
         }
     }
 }

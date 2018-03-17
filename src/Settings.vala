@@ -12,7 +12,7 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  * The Noise authors hereby grant permission for non-GPL compatible
  * GStreamer plugins to be used and distributed together with GStreamer
@@ -41,6 +41,10 @@ namespace TrimDown {
         public bool window_maximized { get; set; }
         public string projects_location { get; set; }
         public bool use_dark_theme { get; set; }
+        public bool remember_last_project { get; set; }
+        public string last_project { get; set; }
+        public string last_chapter { get; set; }
+        public string last_scene { get; set; }
 
         private Settings () {
             base ("com.github.artemanufrij.trimdown");
