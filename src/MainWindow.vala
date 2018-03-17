@@ -42,6 +42,16 @@ namespace TrimDown {
 
         construct {
             settings = Settings.get_default ();
+            settings.notify["use-dark-theme"].connect (
+                () => {
+                    Gtk.Settings.get_default ().gtk_application_prefer_dark_theme = settings.use_dark_theme;
+                    if (settings.use_dark_theme) {
+                        app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu-symbolic", Gtk.IconSize.LARGE_TOOLBAR));
+                    } else {
+                        app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR));
+                    }
+                });
+
             project_manager = Services.ProjectManager.instance;
         }
 
@@ -84,7 +94,11 @@ namespace TrimDown {
             // SETTINGS MENU
             app_menu = new Gtk.MenuButton ();
             app_menu.valign = Gtk.Align.CENTER;
-            app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR));
+            if (settings.use_dark_theme) {
+                app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu-symbolic", Gtk.IconSize.LARGE_TOOLBAR));
+            } else {
+                app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR));
+            }
 
             var settings_menu = new Gtk.Menu ();
 
@@ -213,6 +227,8 @@ namespace TrimDown {
             } else {
                 this.move (settings.window_x, settings.window_y);
             }
+
+            Gtk.Settings.get_default ().gtk_application_prefer_dark_theme = settings.use_dark_theme;
         }
 
         private void save_settings () {
