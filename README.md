@@ -1,6 +1,6 @@
 <div>
   <h1 align="center">TrimDown</h1>
-  <h3 align="center"><img src="data/icons/64/com.github.artemanufrij.trimdown.svg"/><br>A simple, feature rich, writing app for writing Novels, Short stories, Scripts and Articls.</h3>
+  <h3 align="center"><img src="data/icons/64/com.github.artemanufrij.trimdown.svg"/><br>A simple, feature rich, writing app for writing Novels, Short stories, Scripts and Articles.</h3>
   <p align="center">Designed for <a href="https://elementary.io">elementary OS</a></p>
 </div>
 
