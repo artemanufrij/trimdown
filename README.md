@@ -35,4 +35,4 @@ In case you would like to remove installed TrimDown run
 
 sudo ninja uninstall
 ```
-from your build directory
+
