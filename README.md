@@ -8,7 +8,7 @@
 
 As first you need some packages
 ```
-sudo apt install git meson
+sudo apt install git meson libgranite-dev libgtksourceview-3.0-dev
 ```
 
 Clone repository and change directory
@@ -29,3 +29,10 @@ Install and start TrimDown on your system
 sudo ninja install
 com.github.artemanufrij.trimdown
 ```
+
+In case you would like to remove installed TrimDown run
+```
+
+sudo ninja uninstall
+```
+from your build directory
