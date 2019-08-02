@@ -1,5 +1,4 @@
-project('com.github.artemanufrij.trimdown', ['vala', 'c'],
-        version: '1.0.0')
+project('com.github.artemanufrij.trimdown', 'vala', 'c', version: '1.0.0')
 
 i18n = import('i18n')
 gnome = import('gnome')
@@ -13,55 +12,23 @@ c_args = [
   '-include', 'config.h'
 ]
 
-deps = [
-  dependency('granite'),
-  dependency('gtk+-3.0'),
-  dependency('gtksourceview-3.0'),
-  meson.get_compiler('vala').find_library('posix')
-]
-
-#asresources = gnome.compile_resources(
-#    'as-resources', 'schemas/' + meson.project_name() + '.gresource.xml',
-#    source_dir: 'schemas',
-#    c_name: 'as'
-#)
+subdir('src')
 
 executable(
     meson.project_name(),
-    'src/Application.vala',
-    'src/MainWindow.vala',
-    'src/Settings.vala',
-    'src/Objects/BaseObject.vala',
-    'src/Objects/Scene.vala',
-    'src/Objects/Note.vala',
-    'src/Objects/Chapter.vala',
-    'src/Objects/Project.vala',
-    'src/Widgets/Scene.vala',
-    'src/Widgets/SceneList.vala',
-    'src/Widgets/Note.vala',
-    'src/Widgets/Notes.vala',
-    'src/Widgets/Chapter.vala',
-    'src/Widgets/ChapterList.vala',
-    'src/Widgets/Bin.vala',
-    'src/Widgets/Views/Writer.vala',
-    'src/Widgets/Views/Welcome.vala',
-    'src/Dialogs/NewProject.vala',
-    'src/Dialogs/Preferences.vala',
-    'src/Services/ProjectManager.vala',
-    'src/Utils/Utils.vala',
-    'src/Utils/Enums.vala',
-    'src/Utils/Lists.vala',
-
- #   asresources,
+    sources,
     c_args: c_args,
     dependencies: [
-        deps
+        dependency('granite'),
+        dependency('gtk+-3.0'),
+        dependency('gtksourceview-3.0'),
+        meson.get_compiler('vala').find_library('posix')
     ],
     install : true
 )
 
-meson.add_install_script('meson/post_install.py')
-
-subdir('schemas')
 subdir('data')
-#subdir('po')
+subdir('po')
+subdir('schemas')
+
+meson.add_install_script('meson/post_install.py')

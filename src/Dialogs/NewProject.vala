@@ -71,8 +71,8 @@ namespace TrimDown.Dialogs {
 
             choose_type = new Gtk.ComboBoxText ();
             choose_type.append ("[empty]", _ ("[empty]"));
-            choose_type.append ("SiFi", "SiFi");
-            choose_type.append ("Fantasy", "Fantasy");
+            choose_type.append ("SiFi", _ ("SiFi"));
+            choose_type.append ("Fantasy", _ ("Fantasy"));
             choose_type.active_id = "[empty]";
 
             grid.attach (choose_type, 0, 1);
