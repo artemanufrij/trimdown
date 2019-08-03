@@ -2,10 +2,10 @@
 Name=TrimDown
 GenericName=TrimDown
 Comment=An app for Novels and script Writer
-Keywords=graph;visual;draw;
+Keywords=write;novel;script;article;
 Exec=com.github.artemanufrij.trimdown %U
 Icon=com.github.artemanufrij.trimdown
 Terminal=false
 Type=Application
-Categories=Development;GNOME;GTK;
+Categories=Office;GNOME;GTK;
 X-GNOME-Gettext-Domain=com.github.artemanufrij.trimdown

@@ -1,0 +1,13 @@
+src/Dialogs/NewProject.vala
+src/Dialogs/Preferences.vala
+src/Objects/Chapter.vala
+src/Objects/Project.vala
+src/Services/ProjectManager.vala
+src/Widgets/Views/Welcome.vala
+src/Widgets/Chapter.vala
+src/Widgets/ChapterList.vala
+src/Widgets/Note.vala
+src/Widgets/Notes.vala
+src/Widgets/Scene.vala
+src/Widgets/SceneList.vala
+src/MainWindow.vala

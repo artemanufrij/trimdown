@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the extra package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: extra\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-02 12:10+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/com.github.artemanufrij.trimdown.appdata.xml.in:7
+#: data/com.github.artemanufrij.trimdown.desktop.in:3
+#: data/com.github.artemanufrij.trimdown.desktop.in:4
+msgid "TrimDown"
+msgstr ""
+
+#: data/com.github.artemanufrij.trimdown.appdata.xml.in:8
+#: data/com.github.artemanufrij.trimdown.desktop.in:5
+msgid "An app for Novels and script Writer"
+msgstr ""
+
+#: data/com.github.artemanufrij.trimdown.appdata.xml.in:10
+msgid ""
+"A simple, feature rich, writing app for writing Novels, Short stories, "
+"Scripts and Articles."
+msgstr ""
+
+#: data/com.github.artemanufrij.trimdown.appdata.xml.in:20
+msgid "Artem Anufrij"
+msgstr ""
+
+#: data/com.github.artemanufrij.trimdown.desktop.in:6
+msgid "write;novel;script;article;"
+msgstr ""
+
+#: data/com.github.artemanufrij.trimdown.desktop.in:8
+msgid "com.github.artemanufrij.trimdown"
+msgstr ""

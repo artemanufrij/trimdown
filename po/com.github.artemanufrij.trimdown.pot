@@ -1,0 +1,164 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the com.github.artemanufrij.trimdown package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: com.github.artemanufrij.trimdown\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-02 11:58+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/Dialogs/NewProject.vala:54 src/MainWindow.vala:85
+msgid "New Project"
+msgstr ""
+
+#: src/Dialogs/NewProject.vala:67
+msgid "Project Title"
+msgstr ""
+
+#: src/Dialogs/NewProject.vala:73
+msgid "[empty]"
+msgstr ""
+
+#: src/Dialogs/NewProject.vala:74
+msgid "SiFi"
+msgstr ""
+
+#: src/Dialogs/NewProject.vala:75
+msgid "Fantasy"
+msgstr ""
+
+#. ACTION BUTTONS
+#: src/Dialogs/NewProject.vala:85
+msgid "Create"
+msgstr ""
+
+#: src/Dialogs/Preferences.vala:62
+msgid "Use Dark Theme"
+msgstr ""
+
+#: src/Dialogs/Preferences.vala:65
+msgid "Remember last Project"
+msgstr ""
+
+#: src/Dialogs/Preferences.vala:73
+msgid "Close"
+msgstr ""
+
+#: src/Objects/Chapter.vala:65
+msgid "Scenes"
+msgstr ""
+
+#: src/Objects/Chapter.vala:66 src/Objects/Project.vala:95
+msgid "Notes"
+msgstr ""
+
+#: src/Objects/Chapter.vala:148 src/Objects/Project.vala:94
+#, c-format
+msgid "Scene %d"
+msgstr ""
+
+#: src/Objects/Chapter.vala:167
+#, c-format
+msgid "Note %d"
+msgstr ""
+
+#: src/Objects/Project.vala:51 src/Services/ProjectManager.vala:61
+msgid "Chapters"
+msgstr ""
+
+#: src/Objects/Project.vala:103
+#, c-format
+msgid "Chapter %d"
+msgstr ""
+
+#: src/Services/ProjectManager.vala:65
+msgid "Prologue"
+msgstr ""
+
+#: src/Services/ProjectManager.vala:75
+msgid "Open a TrimDown project."
+msgstr ""
+
+#: src/Services/ProjectManager.vala:76
+msgid "_Cancel"
+msgstr ""
+
+#: src/Services/ProjectManager.vala:77
+msgid "_Open"
+msgstr ""
+
+#: src/Services/ProjectManager.vala:80
+msgid "TrimDown Project"
+msgstr ""
+
+#: src/Widgets/Views/Welcome.vala:38
+msgid "Title"
+msgstr ""
+
+#: src/Widgets/Views/Welcome.vala:38
+msgid "Subtitle."
+msgstr ""
+
+#: src/Widgets/Views/Welcome.vala:39
+msgid "Create a new Project"
+msgstr ""
+
+#: src/Widgets/Views/Welcome.vala:39
+msgid "Write your next best seller."
+msgstr ""
+
+#: src/Widgets/Views/Welcome.vala:40
+msgid "Open a Project"
+msgstr ""
+
+#: src/Widgets/Views/Welcome.vala:40
+msgid "Open an exists project from your library."
+msgstr ""
+
+#: src/Widgets/Chapter.vala:103 src/Widgets/Note.vala:71
+#: src/Widgets/Scene.vala:98
+msgid "Restore from Bin"
+msgstr ""
+
+#: src/Widgets/Chapter.vala:105 src/Widgets/Note.vala:73
+#: src/Widgets/Scene.vala:100
+msgid "Move into Bin"
+msgstr ""
+
+#: src/Widgets/ChapterList.vala:59
+msgid "Add a Chapter"
+msgstr ""
+
+#: src/Widgets/Notes.vala:80
+msgid "Add a Note"
+msgstr ""
+
+#: src/Widgets/SceneList.vala:63
+msgid "Add a Scene"
+msgstr ""
+
+#: src/MainWindow.vala:90
+msgid "Open Project"
+msgstr ""
+
+#: src/MainWindow.vala:105
+msgid "Preferences"
+msgstr ""
+
+#: src/MainWindow.vala:121
+msgid "Chapter Notes"
+msgstr ""
+
+#: src/MainWindow.vala:141
+msgid "Deleted Items"
+msgstr ""
