@@ -1,0 +1,165 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the com.github.artemanufrij.trimdown package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.github.artemanufrij.trimdown\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-02 11:58+0200\n"
+"PO-Revision-Date: 2019-08-03 22:44+0200\n"
+"Language-Team: Dutch <vistausss@outlook.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl\n"
+
+#: src/Dialogs/NewProject.vala:54 src/MainWindow.vala:85
+msgid "New Project"
+msgstr "Nieuw project"
+
+#: src/Dialogs/NewProject.vala:67
+msgid "Project Title"
+msgstr "Naam van project"
+
+#: src/Dialogs/NewProject.vala:73
+msgid "[empty]"
+msgstr "[leeg]"
+
+#: src/Dialogs/NewProject.vala:74
+msgid "SiFi"
+msgstr "Sci-Fi"
+
+#: src/Dialogs/NewProject.vala:75
+msgid "Fantasy"
+msgstr "Fantasy"
+
+#. ACTION BUTTONS
+#: src/Dialogs/NewProject.vala:85
+msgid "Create"
+msgstr "Creëren"
+
+#: src/Dialogs/Preferences.vala:62
+msgid "Use Dark Theme"
+msgstr "Donker thema gebruiken"
+
+#: src/Dialogs/Preferences.vala:65
+msgid "Remember last Project"
+msgstr "Vorige project onthouden"
+
+#: src/Dialogs/Preferences.vala:73
+msgid "Close"
+msgstr "Sluiten"
+
+#: src/Objects/Chapter.vala:65
+msgid "Scenes"
+msgstr "Scènes"
+
+#: src/Objects/Chapter.vala:66 src/Objects/Project.vala:95
+msgid "Notes"
+msgstr "Aantekeningen"
+
+#: src/Objects/Chapter.vala:148 src/Objects/Project.vala:94
+#, c-format
+msgid "Scene %d"
+msgstr "Scène %d"
+
+#: src/Objects/Chapter.vala:167
+#, c-format
+msgid "Note %d"
+msgstr "Aantekening %d"
+
+#: src/Objects/Project.vala:51 src/Services/ProjectManager.vala:61
+msgid "Chapters"
+msgstr "Hoofdstukken"
+
+#: src/Objects/Project.vala:103
+#, c-format
+msgid "Chapter %d"
+msgstr "Hoofdstuk %d"
+
+#: src/Services/ProjectManager.vala:65
+msgid "Prologue"
+msgstr "Voorwoord"
+
+#: src/Services/ProjectManager.vala:75
+msgid "Open a TrimDown project."
+msgstr "Open een TrimDown-project."
+
+#: src/Services/ProjectManager.vala:76
+msgid "_Cancel"
+msgstr "_Annuleren"
+
+#: src/Services/ProjectManager.vala:77
+msgid "_Open"
+msgstr "_Openen"
+
+#: src/Services/ProjectManager.vala:80
+msgid "TrimDown Project"
+msgstr "TrimDown-project"
+
+#: src/Widgets/Views/Welcome.vala:38
+msgid "Title"
+msgstr "Titel"
+
+#: src/Widgets/Views/Welcome.vala:38
+msgid "Subtitle."
+msgstr "Ondertitel."
+
+#: src/Widgets/Views/Welcome.vala:39
+msgid "Create a new Project"
+msgstr "Nieuw project creëren"
+
+#: src/Widgets/Views/Welcome.vala:39
+msgid "Write your next best seller."
+msgstr "Schrijf je volgende bestseller."
+
+#: src/Widgets/Views/Welcome.vala:40
+msgid "Open a Project"
+msgstr "Project openen"
+
+#: src/Widgets/Views/Welcome.vala:40
+msgid "Open an exists project from your library."
+msgstr "Open een bestaand project uit je bibliotheek."
+
+#: src/Widgets/Chapter.vala:103 src/Widgets/Note.vala:71
+#: src/Widgets/Scene.vala:98
+msgid "Restore from Bin"
+msgstr "Terughalen uit prullenbak"
+
+#: src/Widgets/Chapter.vala:105 src/Widgets/Note.vala:73
+#: src/Widgets/Scene.vala:100
+msgid "Move into Bin"
+msgstr "Verplaatsen naar prullenbak"
+
+#: src/Widgets/ChapterList.vala:59
+msgid "Add a Chapter"
+msgstr "Hoofdstuk toevoegen"
+
+#: src/Widgets/Notes.vala:80
+msgid "Add a Note"
+msgstr "Aantekening maken"
+
+#: src/Widgets/SceneList.vala:63
+msgid "Add a Scene"
+msgstr "Scène toevoegen"
+
+#: src/MainWindow.vala:90
+msgid "Open Project"
+msgstr "Project openen"
+
+#: src/MainWindow.vala:105
+msgid "Preferences"
+msgstr "Voorkeuren"
+
+#: src/MainWindow.vala:121
+msgid "Chapter Notes"
+msgstr "Hoofdstukaantekeningen"
+
+#: src/MainWindow.vala:141
+msgid "Deleted Items"
+msgstr "Verwijderde items"
